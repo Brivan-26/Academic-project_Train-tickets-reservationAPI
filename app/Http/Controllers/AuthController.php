@@ -42,7 +42,7 @@ class AuthController extends Controller
             'first_name' => $request->first_name,
             'last_name' => $request->last_name,
             'password' => Hash::make($request->password),
-            'role_id' => Role::where('name','passenger')->id,
+            'role_id' => Role::where('name','passenger')->first()->id,
             'account_confirmed' => false
         ]);
         $token = $user->createToken('myapptoken')->plainTextToken;
