@@ -14,7 +14,6 @@ use function PHPUnit\Framework\isEmpty;
 class AuthController extends Controller
 {
     public function register(Request $request){
-
         $validator = Validator::make($request->all(), [
             'phone_number' => 'required|string|unique:users',
             'first_name' => 'required|string|min:4|max:10',
@@ -31,20 +30,19 @@ class AuthController extends Controller
 
         $user = User::where(['first_name' => $request->first_name, 
                             'last_name' => $request->last_name])
-                            ->get()->first();
+                            ->first();
         if($user){
             return response()->json([
                 "succes" => false,
                 "errors" => ["name" => "A user already exits with the same first name and last name"],
             ]);
         }
-
         $user = User::create([
             'phone_number' => $request->phone_number,
             'first_name' => $request->first_name,
             'last_name' => $request->last_name,
             'password' => Hash::make($request->password),
-            'role_id' => 1, //Role::where('name','passenger')->id
+            'role_id' => Role::where('name','passenger')->id,
             'account_confirmed' => false
         ]);
         $token = $user->createToken('myapptoken')->plainTextToken;
@@ -92,7 +90,6 @@ class AuthController extends Controller
     }
 
     public function logout(){
-
         auth()->user()->tokens()->delete();
         return response()->json([
             'succes' => true

@@ -19,7 +19,7 @@ return new class extends Migration
             $table->string('first_name');
             $table->string('last_name');
             $table->string('password');
-            $table->foreignId('role_id');
+            $table->foreignId('role_id')->constrained()->onDelete('cascade');
             $table->boolean('account_confirmed');
             $table->rememberToken();
             $table->timestamps();
