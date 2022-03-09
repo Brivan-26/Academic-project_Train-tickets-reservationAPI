@@ -18,8 +18,9 @@ use App\Models\Role;
 
 Route::controller(AuthController::class)->group(function(){
 
-    Route::post('/register', 'register');
+    Route::post('/register', 'register')->middleware();
     Route::post('/login', 'login');
     Route::post('/logout', 'logout')->middleware("auth:sanctum");
 
 });
+
