@@ -36,9 +36,19 @@ class User extends Authenticatable
         'remember_token',
     ];
 
-    
-
     public function role(){
         return $this->belongsTo(Role::class);
+    }
+
+    public function is_admin(){
+        return ($this->role->name=="admin");
+    }
+
+    public function is_support(){
+        return ($this->role->name=="support");
+    }
+
+    public function is_passenger(){
+        return ($this->role->name=="passenger");
     }
 }
