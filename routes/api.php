@@ -28,9 +28,13 @@ Route::controller(AuthController::class)->group(function(){
 Route::prefix('admin')->name('admin.')->middleware('can:is_admin')->controller(AdminDashboardController::class)->group(function () {
     Route::group(['middleware' => 'auth:sanctum'], function() {
         Route::get('/home', 'index');
-        Route::get('/delete/user/{id}', 'delete_user');
-        Route::get('/restore/user/{id}', 'restore_user');
-        Route::get('/destory/user/{id}', 'destory_user');
+
+        // User CRUD operations
+        Route::get('/user/delete/{id}', 'delete_user');
+        Route::get('/user/restore/{id}', 'restore_user');
+        Route::get('/user/destroy/{id}', 'destory_user');
+
+        
     });
 });
     
