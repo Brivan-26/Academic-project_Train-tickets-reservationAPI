@@ -34,7 +34,12 @@ Route::prefix('admin')->name('admin.')->middleware('can:is_admin')->controller(A
         Route::get('/user/restore/{id}', 'restore_user');
         Route::get('/user/destroy/{id}', 'destory_user');
 
-        
+        // Travel CRUD operations
+
+        Route::get('/travel', 'travels');
+        Route::post('/travel', 'travel_create');
+        Route::put('/travel/{id}', 'travel_update');
+        Route::get('/travel/delete/{id}', 'travel_delete');
     });
 });
     

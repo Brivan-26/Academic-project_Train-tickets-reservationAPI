@@ -8,12 +8,15 @@ use App\Http\Resources\UserResource as UserResource;
 use App\Http\Resources\TravelResource as TravelResource;
 use App\Http\Controllers\BaseController as BaseController;
 use App\Http\Repositories\UserRepository;
+use App\Http\Repositories\TravelRepository;
 class AdminDashboardController extends BaseController
 {
     private $userRepository;
-    public function __construct(UserRepository $userRepository)
+    private $travelRepository;
+    public function __construct(UserRepository $userRepository, TravelRepository $travelRepository)
     {
         $this->userRepository = $userRepository;
+        $this->travelRepository = $travelRepository;
     }
 
     public function index()
@@ -50,6 +53,13 @@ class AdminDashboardController extends BaseController
         }else {
             return $this->sendError('User can not be found!');
         }
+    }
+
+
+    public function travels()
+    {
+        $travels = $this->travelRepository->all();
+        return $this->sendResponse(TravelResource::collection($travels), 'Travels succefully retreived!');
     }
 
 }
