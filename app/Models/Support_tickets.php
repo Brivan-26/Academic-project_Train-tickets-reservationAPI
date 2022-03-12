@@ -10,4 +10,9 @@ class Support_tickets extends Model
     use HasFactory;
 
     protected $fillable = ['user_id', 'description', 'is_assigend', 'is_active'];
+
+    public function user()
+    {
+        return $this->belognsTo(User::class);
+    }
 }

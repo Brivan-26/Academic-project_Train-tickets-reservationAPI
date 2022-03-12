@@ -10,4 +10,9 @@ class Station extends Model
     use HasFactory;
 
     protected $fillable = ['name', 'wilaya'];
+
+    public function travels()
+    {
+        return $this->belongsToMany(Travel::class);
+    }
 }

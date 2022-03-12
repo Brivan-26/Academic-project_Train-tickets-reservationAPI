@@ -16,4 +16,9 @@ class Classe extends Model
         'firstClass_vacancies',
         'secondClass_vacancies'
     ];
+
+    public function travel()
+    {
+        return $this->belongsTo(Travel::class);
+    }
 }

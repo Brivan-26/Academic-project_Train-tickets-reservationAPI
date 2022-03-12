@@ -21,4 +21,19 @@ class Ticket extends Model
         'landing_station',
         'price'
     ];
+
+    public function user()
+    {
+        return $this->belongsTo(User::class);
+    }
+
+    public function support_tickets()
+    {
+        return $this->hasMany(Support_tickets::class);
+    }
+
+    public function travel()
+    {
+        return $this->belongsTo(Travel::class);
+    }
 }

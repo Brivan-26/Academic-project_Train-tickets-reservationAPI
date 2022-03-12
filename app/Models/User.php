@@ -41,6 +41,11 @@ class User extends Authenticatable
         return $this->belongsTo(Role::class);
     }
 
+    public function tickets()
+    {
+        return $this->hasMany(Ticket::class);
+    }
+
     public function is_admin(){
         return ($this->role->name=="admin");
     }
