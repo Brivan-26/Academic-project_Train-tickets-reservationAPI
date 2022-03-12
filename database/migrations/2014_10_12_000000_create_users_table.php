@@ -21,6 +21,7 @@ return new class extends Migration
             $table->string('password');
             $table->foreignId('role_id')->constrained()->onDelete('cascade');
             $table->boolean('account_confirmed');
+            $table->softDeletes();
             $table->rememberToken();
             $table->timestamps();
         });
@@ -34,5 +35,6 @@ return new class extends Migration
     public function down()
     {
         Schema::dropIfExists('users');
+        
     }
 };

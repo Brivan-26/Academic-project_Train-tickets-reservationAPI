@@ -3,6 +3,7 @@
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\AuthController;
+use App\Http\Controllers\AdminDashboardController;
 use App\Models\Role;
 
 /*
@@ -24,3 +25,12 @@ Route::controller(AuthController::class)->group(function(){
 
 });
 
+Route::prefix('admin')->name('admin.')->middleware('can:is_admin')->controller(AdminDashboardController::class)->group(function () {
+    Route::group(['middleware' => 'auth:sanctum'], function() {
+        Route::get('/home', 'index');
+        Route::get('/delete/user/{id}', 'delete_user');
+        Route::get('/restore/user/{id}', 'restore_user');
+        Route::get('/destory/user/{id}', 'destory_user');
+    });
+});
+    
