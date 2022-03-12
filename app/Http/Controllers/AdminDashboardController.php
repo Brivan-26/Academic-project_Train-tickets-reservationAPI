@@ -62,4 +62,34 @@ class AdminDashboardController extends BaseController
         return $this->sendResponse(TravelResource::collection($travels), 'Travels succefully retreived!');
     }
 
+    public function travel_create(Request $request)
+    {
+        $travel = $this->travelRepository->createByRequest($request);
+        if($travel) {
+            return $this->sendResponse(new TravelResource($travel), 'Succefully created the travel!');
+        }else {
+            return $this->sendError('Something went wrong!');
+        }
+    }
+
+    public function travel_update(Request $request, $id)
+    {
+        $travel = $this->travelRepository->updateByRequest($request, $id);
+        if($travel) {
+            return $this->sendResponse(new TravelResource($travel), 'Travel succefully updated!');
+        }else {
+            return $this->sendError('Something went wrong!');
+        }
+    }
+
+    public function travel_delete($id)
+    {
+        $travel = $this->travelRepository->deleteById($id);
+        if($travel) {
+            return $this->sendResponse(new TravelResource($travel), 'Travel succefully deleted!');
+        }else {
+            return $this->sendError('Something went wrong!');
+        }
+    }
+
 }

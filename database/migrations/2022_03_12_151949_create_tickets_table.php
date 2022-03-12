@@ -40,8 +40,6 @@ return new class extends Migration
      */
     public function down()
     {
-        $table->dropForeign('tickets_boarding_station_foreign');
-        $table->dropForeign('tickets_landing_station_foreign');
         Schema::dropIfExists('tickets');
     }
 };

@@ -3,7 +3,6 @@
 namespace App\Http\Resources;
 
 use Illuminate\Http\Resources\Json\JsonResource;
-
 class TravelResource extends JsonResource
 {
     /**
@@ -23,9 +22,8 @@ class TravelResource extends JsonResource
             'distance' => $this->distance,
             'estimated_duration' => $this->estimated_duration,
             'description' => $this->description,
-            'description' => $this->description,
-            'created_at' => $this->created_at,
-            'updated_at' => $this->updated_at
+            'created_at' => $this->created_at->diffForHumans(),
+            'updated_at' =>  $this->updated_at ? $this->updated_at->diffForHumans() : $this->updated_at
         ];
     }
 }
