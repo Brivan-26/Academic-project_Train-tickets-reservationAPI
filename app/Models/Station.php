@@ -15,4 +15,9 @@ class Station extends Model
     {
         return $this->belongsToMany(Travel::class);
     }
+
+    public function photos()
+    {
+        return $this->hasMany(Station_photo::class);
+    }
 }

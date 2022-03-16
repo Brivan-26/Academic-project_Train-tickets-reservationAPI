@@ -33,6 +33,7 @@ Route::prefix('admin')->name('admin.')->middleware('can:is_admin')->controller(A
         Route::get('/user/delete/{id}', 'delete_user');
         Route::get('/user/restore/{id}', 'restore_user');
         Route::get('/user/destroy/{id}', 'destory_user');
+        Route::get('/user/upgradeRole/{id}', 'upgradeRole_user');
 
         // Travel CRUD operations
 
@@ -40,6 +41,14 @@ Route::prefix('admin')->name('admin.')->middleware('can:is_admin')->controller(A
         Route::post('/travel', 'travel_create');
         Route::put('/travel/{id}', 'travel_update');
         Route::get('/travel/delete/{id}', 'travel_delete');
+
+        // Station CRUD operations
+
+        Route::get('/station', 'stations');
+        Route::post('/station', 'station_create');
+        Route::put('/station/{id}', 'station_update');
+        Route::get('/station/delete/{id}', 'station_delete');
+
     });
 });
     

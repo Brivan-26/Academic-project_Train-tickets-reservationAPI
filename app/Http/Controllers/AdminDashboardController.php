@@ -6,17 +6,21 @@ use Illuminate\Http\Request;
 use App\Models\User;
 use App\Http\Resources\UserResource as UserResource;
 use App\Http\Resources\TravelResource as TravelResource;
+use App\Http\Resources\StationResource as StationResource;
 use App\Http\Controllers\BaseController as BaseController;
 use App\Http\Repositories\UserRepository;
 use App\Http\Repositories\TravelRepository;
+use App\Http\Repositories\StationRepository;
 class AdminDashboardController extends BaseController
 {
     private $userRepository;
     private $travelRepository;
-    public function __construct(UserRepository $userRepository, TravelRepository $travelRepository)
+    private $stationRepository;
+    public function __construct(UserRepository $userRepository, TravelRepository $travelRepository, StationRepository $stationRepository)
     {
         $this->userRepository = $userRepository;
         $this->travelRepository = $travelRepository;
+        $this->stationRepository = $stationRepository;
     }
 
     public function index()
@@ -52,6 +56,16 @@ class AdminDashboardController extends BaseController
             return $this->sendResponse(new UserResource($user), 'User permananly deleted succefully');
         }else {
             return $this->sendError('User can not be found!');
+        }
+    }
+
+    public function upgradeRole_user(Request $request, $id)
+    {
+        $user = $this->userRepository->upgradeRole($request, $id);
+        if($user) {
+            return $this->sendResponse(new UserResource($user), 'User role is succefully updated');
+        }else {
+            return $this->sendError('Something went wrong!');
         }
     }
 
@@ -91,5 +105,12 @@ class AdminDashboardController extends BaseController
             return $this->sendError('Something went wrong!');
         }
     }
+
+    public function stations()
+    {
+        $stations = $this->stationRepository->all();
+        return $this->sendResponse(StationResource::collection($stations), 'Succefully retreived all the stations!');
+    }
+   
 
 }

@@ -2,6 +2,7 @@
 namespace App\Http\Repositories;
 
 use App\Models\User;
+use Illuminate\Support\Facades\Validator;
 Class UserRepository 
 {
     public function all()
@@ -36,6 +37,24 @@ Class UserRepository
         $query = User::onlyTrashed()->where('id',$id)->first();
         if($query) {
             $query->forceDelete();
+        }
+        return $query;
+    }
+
+    public function upgradeRole($request, $id)
+    {
+        $validator = Validator::make($request->all(), [
+            'role' => 'exists:roles,id'
+        ]);
+
+        if($validator->fails()) {
+            return null;
+        }
+        
+        $query = User::find($id);
+        if($query) {
+            $query->role_id = $request->role;
+            $query->save();
         }
         return $query;
     }
