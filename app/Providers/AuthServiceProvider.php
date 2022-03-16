@@ -37,5 +37,6 @@ class AuthServiceProvider extends ServiceProvider
         Gate::define('is_passenger', function (User $user) {
             return $user->is_passenger();
         });
+
     }
 }

@@ -4,7 +4,7 @@ namespace App\Http\Repositories;
 
 use App\Models\Travel;
 use Illuminate\Support\Facades\Validator;
-Class TravelRepository
+Class TravelRepository 
 {
     public function all()
     {
@@ -63,7 +63,8 @@ Class TravelRepository
                 return $travel;
             }
         }else {
-            return BaseController->sendError('travel can not be found!', 404);
+            return null;
+            //BaseController->sendError('travel can not be found!', 404);
         }
     }
 
@@ -72,8 +73,9 @@ Class TravelRepository
         $travel = Travel::find($travelId);
         if($travel) {
             $travel->delete();
-            return $travel;
         }
+        return $travel;
+
     }
 
     

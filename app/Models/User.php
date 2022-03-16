@@ -46,6 +46,22 @@ class User extends Authenticatable
         return $this->hasMany(Ticket::class);
     }
 
+    public function support_tickets()
+    {
+        if ($this->is_passenger()){
+            return $this->hasMany(Support_ticket::class);
+        }
+        if ($this->is_support()){
+            return $this->hasMany(Support_ticket::class,'is_assigned');
+        }
+        return null;
+    }
+
+    public function support_tickets_answers()
+    {
+        return $this->hasMany(Support_tickets_answer::class);
+    }
+
     public function is_admin(){
         return ($this->role->name=="admin");
     }

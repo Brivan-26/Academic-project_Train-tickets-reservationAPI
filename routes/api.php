@@ -4,7 +4,11 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\AdminDashboardController;
+use App\Http\Controllers\UserController;
 use App\Models\Role;
+use App\Models\User;
+use App\Models\Support_ticket;
+use Illuminate\Support\Facades\Auth;
 
 /*
 |--------------------------------------------------------------------------
@@ -19,6 +23,7 @@ use App\Models\Role;
 
 Route::controller(AuthController::class)->group(function(){
 
+     //authentification routes
     Route::post('/register', 'register')->middleware();
     Route::post('/login', 'login');
     Route::post('/logout', 'logout')->middleware("auth:sanctum");
@@ -42,4 +47,11 @@ Route::prefix('admin')->name('admin.')->middleware('can:is_admin')->controller(A
         Route::get('/travel/delete/{id}', 'travel_delete');
     });
 });
-    
+
+Route::prefix('user')->middleware("auth:sanctum")->controller(UserController::class)->group(function(){
+    Route::post('/update_infos','update_infos');
+    Route::post('/update_password','update_password');
+});
+Route::get('/test',function(){
+    return auth()->user();
+})->middleware("auth:sanctum");

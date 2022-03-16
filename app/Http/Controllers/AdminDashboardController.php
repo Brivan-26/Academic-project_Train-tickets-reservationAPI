@@ -74,6 +74,7 @@ class AdminDashboardController extends BaseController
 
     public function travel_update(Request $request, $id)
     {
+        
         $travel = $this->travelRepository->updateByRequest($request, $id);
         if($travel) {
             return $this->sendResponse(new TravelResource($travel), 'Travel succefully updated!');

@@ -8,11 +8,12 @@ use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Validator;
 use App\Models\User;
 use App\Models\Role;
-
+use App\Http\Repositories\UserRepository;
+use App\Http\Resources\UserResource;
 use function PHPUnit\Framework\isEmpty;
 
-class AuthController extends Controller
-{
+class AuthController extends BaseController
+{   
     public function register(Request $request){
         $validator = Validator::make($request->all(), [
             'phone_number' => 'required|string|unique:users',
@@ -22,20 +23,14 @@ class AuthController extends Controller
             'confirm_password' => 'required|same:password',
         ]);
         if($validator->fails()){
-            return response()->json([
-                "succes" => false,
-                "errors" => $validator->errors()
-            ]);
+            return $this->sendError("Validation of data failed",$validator->errors());
         }
 
         $user = User::where(['first_name' => $request->first_name, 
                             'last_name' => $request->last_name])
                             ->first();
         if($user){
-            return response()->json([
-                "succes" => false,
-                "errors" => ["name" => "A user already exits with the same first name and last name"],
-            ]);
+            return $this->sendError("A user with the same first and last name already exists");
         }
         $user = User::create([
             'phone_number' => $request->phone_number,
@@ -46,10 +41,11 @@ class AuthController extends Controller
             'account_confirmed' => false
         ]);
         $token = $user->createToken('myapptoken')->plainTextToken;
-        return response()->json([
-            'succes' => true,
+        $result = [
+            'user' => new UserResource($user),
             'token' => $token
-        ]);
+        ];
+        return $this->sendResponse($result,'Registration succesfull');
 
     }
 
@@ -60,40 +56,25 @@ class AuthController extends Controller
             'password' => 'required',
         ]);
         if($validator->fails()){
-            return response()->json([
-                "succes" => false,
-                "errors" => $validator->errors()
-            ]);
+            return $this->sendError("Validation of data failed",$validator->errors());
         }
 
         $user = User::where('phone_number',$request->phone_number)->first();
-        if(!$user){
-            return response()->json([
-                'succes' => false,
-                'errors' => ["phone_number" => 'No user found with the specified phone number']
-            ]);
-        }
-
-        if(!Hash::check($request->password,$user->password)){
-            return response()->json([
-                'succes' => false,
-                'errors' => ["password" => 'The entered password is incorrect']
-            ]);
+        if(!$user || !Hash::check($request->password,$user->password)){
+            return $this->sendError("No user found with the specified data");
         }
 
         $token = $user->createToken('myapptoken')->plainTextToken;
-        return response()->json([
-            'succes' => true,
+        $result = [
+            'user' => new UserResource($user),
             'token' => $token
-        ]);
+        ];
+        return $this->sendResponse($result,'Login succesfull');
 
     }
 
     public function logout(){
         auth()->user()->tokens()->delete();
-        return response()->json([
-            'succes' => true
-        ]);
-        
+        return $this->sendResponse([],'Logged out succesfully');
     }
 }

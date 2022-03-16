@@ -29,7 +29,7 @@ class Ticket extends Model
 
     public function support_tickets()
     {
-        return $this->hasMany(Support_tickets::class);
+        return $this->hasMany(Support_ticket::class);
     }
 
     public function travel()

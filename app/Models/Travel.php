@@ -32,6 +32,6 @@ class Travel extends Model
 
     public function classes()
     {
-        return $this->hasMany(Classe::class);
+        return $this->hasOne(Classe::class);
     }
 }
