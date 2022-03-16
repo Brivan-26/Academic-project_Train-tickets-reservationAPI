@@ -48,7 +48,8 @@ Route::prefix('admin')->name('admin.')->middleware('can:is_admin')->controller(A
         Route::post('/station', 'station_create');
         Route::put('/station/{id}', 'station_update');
         Route::get('/station/delete/{id}', 'station_delete');
-
+        Route::get('/station/restore/{id}', 'station_restore');
+        Route::get('/station/destroy/{id}', 'station_destroy');
     });
 });
     

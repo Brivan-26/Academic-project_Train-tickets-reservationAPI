@@ -111,6 +111,54 @@ class AdminDashboardController extends BaseController
         $stations = $this->stationRepository->all();
         return $this->sendResponse(StationResource::collection($stations), 'Succefully retreived all the stations!');
     }
+
+    public function station_create(Request $request)
+    {
+        $station = $this->stationRepository->createByRequest($request);
+        if($station) {
+            return $this->sendResponse(new StationResource($station), 'The station is succefully created!');
+        }else {
+            return $this->sendError('Something went wrong!');
+        }
+    }
+
+    public function station_update(Request $request, $id)
+    {
+        $station = $this->stationRepository->updateByRequest($request, $id);
+        if($station) {
+            return $this->sendResponse(new StationResource($station), 'Station is succefully updated!');
+        }else {
+            return $this->sendError('Something went wrong!');
+        }
+
+    }
+
+    public function station_delete($id) {
+        $station = $this->stationRepository->deleteById($id);
+        if($station) {
+            return $this->sendResponse(new StationResource($station), 'Station is succefully deleted!');
+        }else {
+            return $this->sendError('Something went wrong!');
+        }
+    }
    
+    public function station_restore($id)
+    {
+        $station = $this->stationRepository->restoreById($id);
+        if($station) {
+            return $this->sendResponse(new StationResource($station), 'Station is sucefully restored!');
+        }else {
+            return $this->sendError('Something went wrong!');
+        }
+    }
+
+    public function station_destroy($id) {
+        $station = $this->stationRepository->destroyById($id);
+        if($station) {
+            return $this->sendResponse(new StationResource($station), 'Station is succefully permanantly deleted!');
+        }else {
+            return $this->sendError('Something went wrong!');
+        }
+    }
 
 }
