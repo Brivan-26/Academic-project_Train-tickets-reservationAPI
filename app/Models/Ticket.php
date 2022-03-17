@@ -36,4 +36,15 @@ class Ticket extends Model
     {
         return $this->belongsTo(Travel::class);
     }
+
+    public function boardingStation()
+    {
+        return $this->belongsTo(Station::class, 'boarding_station');
+    }
+
+    public function landingStation()
+    {
+        return $this->belongsTo(Station::class, 'landing_station');
+    }
+
 }

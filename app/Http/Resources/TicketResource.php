@@ -26,8 +26,8 @@ class TicketResource extends JsonResource
             'payment_method' => $this->payment_method,
             'payment_token' => $this->payment_token,
             'validated' => $this->validated,
-            'boarding_station' => $this->boarding_station,
-            'landing_station' => $this->landing_station,
+            'boarding_station' => new StationResource($this->boardingStation),
+            'landing_station' => new StationResource($this->landingStation),
             'price' => $this->price,
             'created_at' => $this->created_at->diffForHumans(),
             'updated_at' => $this->updated_at ? $this->updated_at->diffForHumans(): $this->updated_at

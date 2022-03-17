@@ -22,4 +22,9 @@ class Station extends Model
     {
         return $this->hasMany(Station_photo::class);
     }
+
+    public function tickets()
+    {
+        return $this->hasMany(Ticket::class);
+    }
 }
