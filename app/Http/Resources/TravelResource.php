@@ -22,6 +22,7 @@ class TravelResource extends JsonResource
             'distance' => $this->distance,
             'estimated_duration' => $this->estimated_duration,
             'description' => $this->description,
+            'status' => $this->status,
             'created_at' => $this->created_at->diffForHumans(),
             'updated_at' =>  $this->updated_at ? $this->updated_at->diffForHumans() : $this->updated_at
         ];
