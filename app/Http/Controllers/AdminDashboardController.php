@@ -7,20 +7,24 @@ use App\Models\User;
 use App\Http\Resources\UserResource as UserResource;
 use App\Http\Resources\TravelResource as TravelResource;
 use App\Http\Resources\StationResource as StationResource;
+use App\Http\Resources\TicketResource as TicketResource;
 use App\Http\Controllers\BaseController as BaseController;
 use App\Http\Repositories\UserRepository;
 use App\Http\Repositories\TravelRepository;
 use App\Http\Repositories\StationRepository;
+use App\Http\Repositories\TicketRepository;
 class AdminDashboardController extends BaseController
 {
     private $userRepository;
     private $travelRepository;
     private $stationRepository;
-    public function __construct(UserRepository $userRepository, TravelRepository $travelRepository, StationRepository $stationRepository)
+    private $ticketRepository;
+    public function __construct(UserRepository $userRepository, TravelRepository $travelRepository, StationRepository $stationRepository, TicketRepository $ticketRepository)
     {
         $this->userRepository = $userRepository;
         $this->travelRepository = $travelRepository;
         $this->stationRepository = $stationRepository;
+        $this->ticketRepository = $ticketRepository;
     }
 
     public function index()
@@ -156,6 +160,37 @@ class AdminDashboardController extends BaseController
         $station = $this->stationRepository->destroyById($id);
         if($station) {
             return $this->sendResponse(new StationResource($station), 'Station is succefully permanantly deleted!');
+        }else {
+            return $this->sendError('Something went wrong!');
+        }
+    }
+
+
+    public function tickets()
+    {
+        $tickets = $this->ticketRepository->all();
+        if($tickets) {
+            return $this->sendResponse(TicketResource::collection($tickets), 'Tickets succefully retrieved!');
+        }else {
+            return $this->sendError('Something went wrong!');
+        }
+    }
+
+    public function tickets_nonExpired()
+    {
+        $tickets = $this->ticketRepository->getTicketsNonExpired();
+        if($tickets) {
+            return $this->sendResponse(TicketResource::collection($tickets), 'Succefully retreived tickets!');
+        }else {
+            return $this->sendError('Something went wrong!');
+        }
+    }
+
+    public function ticket_get($id)
+    {
+        $ticket = $this->ticketRepository->getById($id);
+        if($ticket) {
+            return $this->sendResponse(new TicketResource($ticket), 'Succefully retrieved the ticket!');
         }else {
             return $this->sendError('Something went wrong!');
         }

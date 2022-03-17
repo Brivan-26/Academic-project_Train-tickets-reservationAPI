@@ -25,7 +25,7 @@ Route::controller(AuthController::class)->group(function(){
 
 });
 
-Route::prefix('admin')->name('admin.')->middleware('can:is_admin')->controller(AdminDashboardController::class)->group(function () {
+Route::prefix('admin')->middleware('can:is_admin')->controller(AdminDashboardController::class)->group(function () {
     Route::group(['middleware' => 'auth:sanctum'], function() {
         Route::get('/home', 'index');
 
@@ -50,6 +50,11 @@ Route::prefix('admin')->name('admin.')->middleware('can:is_admin')->controller(A
         Route::get('/station/delete/{id}', 'station_delete');
         Route::get('/station/restore/{id}', 'station_restore');
         Route::get('/station/destroy/{id}', 'station_destroy');
+
+        // Tickets
+        Route::get('/tickets', 'tickets');
+        Route::get('/tickets/nonExpired', 'tickets_nonExpired');
+        Route::get('/ticket/{id}', 'ticket_get');
     });
 });
     
