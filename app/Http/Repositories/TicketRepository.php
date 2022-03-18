@@ -18,10 +18,15 @@ Class TicketRepository {
 
     public function getById($ticketId)
     {
+        $response = [];
         $ticket = Ticket::find($ticketId);
         if($ticket) {
-            return $ticket;
+            $response["success"] = true;
+            $response["data"] = $ticket;
+            return $response;
         }
-        return null;
+        $response["success"] = false;
+        $response["errors"] = 'Ticket not found!';
+        return $response;
     }
 }

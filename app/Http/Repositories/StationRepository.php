@@ -9,18 +9,22 @@ class StationRepository {
 
     public function all()
     {
+    
         $stations = Station::all();
         return $stations;
     }
 
     public function createByRequest($request)
     {
+        $response = [];
         $validator = Validator::make($request->all(), [
             'name' => 'required', 
             'wilaya' => 'required'
         ]);
         if($validator->fails()) {
-            return null;
+            $response["success"] = false;
+            $response["errors"] = $validator->errors();
+            return $response;
         }
         $station = Station::create([
             'name' => $request->name,
@@ -34,7 +38,9 @@ class StationRepository {
                 $fileExtension = $file->getClientOriginalExtension();
                 $check = in_array($fileExtension, $allowedfileExtension);
                 if(!check) {
-                    return null;
+                    $response["success"] = false;
+                    $response["errors"] = "file extension must be jpg or png";
+                    return $response;
                 }
                 $file->move('uploads/stations', $fileName);                
                 Station_photo::create([
@@ -43,14 +49,18 @@ class StationRepository {
                 ]);
             } 
         }
-
-        return $station;
+        $response["success"] = true;
+        $response["data"] = $station;
+        return $response;
     }
 
     public function updateByRequest($request, $id) {
+        $response = [];
         $station = Station::find($id);
         if(!$station) {
-            return null;
+            $response["success"] = false;
+            $response["errors"] = "station can not be found!";
+            return $response;
         }
 
         $validator = Validator::make($request->all(), [
@@ -58,43 +68,62 @@ class StationRepository {
             'wilaya' => 'required'
         ]);
         if($validator->fails()) {
-            return null;
+            $response["success"] = false;
+            $response["errors"] = $validator->errors();
+            return $response;
         }
         $station->name = $request->name; $station->wilaya = $request->wilaya;
         $station->save();
-        return $station;
+        $response["success"] = true;
+        $response["data"] = $station;
+        return $response;
         // Station photos update!!!
     }
 
 
     public function deleteById($id)
     {
+        $response = [];
         $station = Station::find($id);
         if(!$station) {
-            return null;
+            $response["success"] = false;
+            $response["errors"] = "Station can not be found!";
+            return $response;
         }
         $station->delete();
-        return $station;
+        $response["success"] = true;
+        $response["data"] = $station;
+        return $response;
     }
 
     public function restoreById($id)
     {
+        $response = [];
         $station = Station::onlyTrashed()->where('id', $id)->first();
         if(!$station) {
-            return null;
+            $response["success"] = false;
+            $response["errors"] = "Station can not be found!";
+            return $response;
         }
         $station->restore();
-        return $station;
+        $response["success"] = true;
+        $response["data"] = $station;
+        return $response;
     }
 
     public function destroyById($id)
     {
+        $response = [];
         $station = Station::onlyTrashed()->where('id', $id)->first();
         if(!$station) {
-            return null;
+            $response["success"] = false;
+            $response["errors"] = "Station can not be found!";
+            return $response;
         }
         $station->forceDelete();
-        return $station;
+        $response["success"] = true;
+        $response["data"] = $station;
+        return $response;
     }
     
 }

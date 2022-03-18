@@ -13,6 +13,7 @@ Class TravelRepository
 
     public function createByRequest($request)
     {
+        $response = [];
         $validator = Validator::make($request->all(), [
             'departure_station' => 'required|string',
             'departure_time' => 'required',
@@ -23,7 +24,9 @@ Class TravelRepository
         ]);
 
         if($validator->fails()){
-            return null;
+            $response["success"] = false;
+            $response["errors"] = $validator->errors();
+            return $response;
         }
 
         $travel = Travel::create([
@@ -35,11 +38,14 @@ Class TravelRepository
             'description' => $request->description,
             "status" => "pending"
         ]);
-
-        return $travel;
+        
+        $response["success"] = true;
+        $response["data"] = $travel;
+        return $response;
     }
 
     public function updateByRequest($request, $travelId) {
+        $response = [];
         $travel = Travel::find($travelId);
         if($travel) {
             $validator = Validator::make($request->all(), [
@@ -51,7 +57,9 @@ Class TravelRepository
                 'description' => 'required',
             ]);
             if($validator->fails()) {
-                return null;
+                $response["success"] = false;
+                $response["errors"] = $validator->errors();
+                return $response;
             }else {
                 $travel->departure_station = $request->departure_station;
                 $travel->departure_time = $request->departure_time;
@@ -60,19 +68,30 @@ Class TravelRepository
                 $travel->estimated_duration = $request->estimated_duration;
                 $travel->description = $request->description;
                 $travel->save();
-                return $travel;
+                $response["success"] = true;
+                $response["data"] = $travel;
+                return $response;
             }
         }else {
-            return BaseController->sendError('travel can not be found!', 404);
+            $response["success"] = false;
+            $response["errors"] = "Travel can not be found!";
+            return $response;
         }
     }
 
     public function deleteById($travelId)
     {
+        $response = [];
         $travel = Travel::find($travelId);
         if($travel) {
             $travel->delete();
-            return $travel;
+            $response["success"] = true;
+            $response["data"] = $travel;
+            return $response;
+        }else {
+            $response["success"] = false;
+            $response["errors"] = "Travel can not be found!";
+            return $response;
         }
     }
 

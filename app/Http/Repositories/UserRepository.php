@@ -7,56 +7,82 @@ Class UserRepository
 {
     public function all()
     {
-        $query = User::all()->reject(function($user) {
+        $user = User::all()->reject(function($user) {
             return ($user->deleted_at != NULL || $user->id == auth()->user()->id);
         });
 
-        return $query;
+        return $user;
     }
 
     public function deleteById($id)
     {
-        $query = User::find($id);
-        if($query) {
-            $query->delete();
+        $response = [];
+        $user = User::find($id);
+        if($user) {
+            $user->delete();
+            $response["success"] = true;
+            $response["data"] = $user;
+            return $response;
         }
-        return $query;
+        $response["success"] = false;
+        $response["errors"] = "User can not be found!";
+        return $response;
     }
 
     public function restoreById($id)
     {
-        $query = User::onlyTrashed()->where('id', $id)->first();
-        if($query) {
-            $query->restore();
+        $response = [];
+        $user = User::onlyTrashed()->where('id', $id)->first();
+        if($user) {
+            $user->restore();
+            $response["success"] = true;
+            $response["data"] = $user;
+            return $response;
         }
-        return $query;
+        $response["success"] = false;
+        $response["errors"] = "User can not be found!";
+        return $response;
     }
 
     public function destoryById($id)
     {
-        $query = User::onlyTrashed()->where('id',$id)->first();
-        if($query) {
-            $query->forceDelete();
+        $response = [];
+        $user = User::onlyTrashed()->where('id',$id)->first();
+        if($user) {
+            $user->forceDelete();
+            $response["success"] = true;
+            $response["data"] = $user;
+            return $response;
         }
-        return $query;
+        $response["success"] = false;
+        $response["errors"] = "User can not be found!";
+        return $response;
     }
 
     public function upgradeRole($request, $id)
     {
+        $response = [];
         $validator = Validator::make($request->all(), [
             'role' => 'exists:roles,id'
         ]);
 
         if($validator->fails()) {
-            return null;
+            $response["success"] = false;
+            $response["errors"] = $validator->errors();
+            return $response;
         }
         
-        $query = User::find($id);
-        if($query) {
-            $query->role_id = $request->role;
-            $query->save();
+        $user = User::find($id);
+        if($user) {
+            $user->role_id = $request->role;
+            $user->save();
+            $response["success"] = true;
+            $response["data"] = $user;
+            return $response;
         }
-        return $query;
+        $response["success"] = false;
+        $response["errors"] = "User can not be found!";
+        return $response;
     }
 }
 
