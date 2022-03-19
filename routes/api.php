@@ -25,8 +25,7 @@ Route::controller(AuthController::class)->group(function(){
 
 });
 
-Route::prefix('admin')->middleware('can:is_admin')->controller(AdminDashboardController::class)->group(function () {
-    Route::group(['middleware' => 'auth:sanctum'], function() {
+Route::prefix('admin')->middleware(['auth:sanctum', 'can:is_admin'])->controller(AdminDashboardController::class)->group(function () {
         Route::get('/home', 'index');
 
         // User CRUD operations
@@ -55,6 +54,5 @@ Route::prefix('admin')->middleware('can:is_admin')->controller(AdminDashboardCon
         Route::get('/tickets', 'tickets');
         Route::get('/tickets/nonExpired', 'tickets_nonExpired');
         Route::get('/ticket/{id}', 'ticket_get');
-    });
 });
     
