@@ -31,14 +31,14 @@ Route::controller(AuthController::class)->group(function(){
 
 });
 
-Route::prefix('admin')->name('admin.')->middleware('can:is_admin')->controller(AdminDashboardController::class)->group(function () {
-    Route::group(['middleware' => 'auth:sanctum'], function() {
+Route::prefix('admin')->middleware(['auth:sanctum', 'can:is_admin'])->controller(AdminDashboardController::class)->group(function () {
         Route::get('/home', 'index');
 
         // User CRUD operations
         Route::get('/user/delete/{id}', 'delete_user');
         Route::get('/user/restore/{id}', 'restore_user');
         Route::get('/user/destroy/{id}', 'destory_user');
+        Route::get('/user/upgradeRole/{id}', 'upgradeRole_user');
 
         // Travel CRUD operations
 
@@ -46,7 +46,20 @@ Route::prefix('admin')->name('admin.')->middleware('can:is_admin')->controller(A
         Route::post('/travel', 'travel_create');
         Route::put('/travel/{id}', 'travel_update');
         Route::get('/travel/delete/{id}', 'travel_delete');
-    });
+
+        // Station CRUD operations
+
+        Route::get('/station', 'stations');
+        Route::post('/station', 'station_create');
+        Route::put('/station/{id}', 'station_update');
+        Route::get('/station/delete/{id}', 'station_delete');
+        Route::get('/station/restore/{id}', 'station_restore');
+        Route::get('/station/destroy/{id}', 'station_destroy');
+
+        // Tickets
+        Route::get('/tickets', 'tickets');
+        Route::get('/tickets/nonExpired', 'tickets_nonExpired');
+        Route::get('/ticket/{id}', 'ticket_get');
 });
 
 Route::prefix('user')->middleware("auth:sanctum")->controller(UserController::class)->group(function(){

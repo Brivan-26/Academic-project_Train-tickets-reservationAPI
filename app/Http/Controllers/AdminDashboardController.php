@@ -6,17 +6,25 @@ use Illuminate\Http\Request;
 use App\Models\User;
 use App\Http\Resources\UserResource as UserResource;
 use App\Http\Resources\TravelResource as TravelResource;
+use App\Http\Resources\StationResource as StationResource;
+use App\Http\Resources\TicketResource as TicketResource;
 use App\Http\Controllers\BaseController as BaseController;
 use App\Http\Repositories\UserRepository;
 use App\Http\Repositories\TravelRepository;
+use App\Http\Repositories\StationRepository;
+use App\Http\Repositories\TicketRepository;
 class AdminDashboardController extends BaseController
 {
     private $userRepository;
     private $travelRepository;
-    public function __construct(UserRepository $userRepository, TravelRepository $travelRepository)
+    private $stationRepository;
+    private $ticketRepository;
+    public function __construct(UserRepository $userRepository, TravelRepository $travelRepository, StationRepository $stationRepository, TicketRepository $ticketRepository)
     {
         $this->userRepository = $userRepository;
         $this->travelRepository = $travelRepository;
+        $this->stationRepository = $stationRepository;
+        $this->ticketRepository = $ticketRepository;
     }
 
     public function index()
@@ -27,31 +35,41 @@ class AdminDashboardController extends BaseController
 
     public function delete_user($id) 
     {
-        $user = $this->userRepository->deleteById($id);
-        if($user) {
-            return $this->sendResponse(new UserResource($user), 'User deleted succefully');
+        $response = $this->userRepository->deleteById($id);
+        if($response["success"]) {
+            return $this->sendResponse(new UserResource($response["data"]), 'User deleted succefully');
         }else {
-            return $this->sendError('User can not be found!');
+            return $this->sendError('Something went wrong!', $response["errors"]);
         }
     }
     
     public function restore_user($id)
     {
-        $user = $this->userRepository->restoreById($id);
-        if($user) {
-            return $this->sendResponse(new UserResource($user), 'User restored succefully');
+        $response = $this->userRepository->restoreById($id);
+        if($response["success"]) {
+            return $this->sendResponse(new UserResource($response["data"]), 'User restored succefully');
         }else {
-            return $this->sendError('User can not be found!');
+            return $this->sendError('Something went wrong!', $response["errors"]);
         }
     }
 
     public function destory_user($id) 
     {
-        $user = $this->userRepository->destoryById($id);
-        if($user) {
-            return $this->sendResponse(new UserResource($user), 'User permananly deleted succefully');
+        $response = $this->userRepository->destoryById($id);
+        if($response["success"]) {
+            return $this->sendResponse(new UserResource($response["data"]), 'User permananly deleted succefully');
         }else {
-            return $this->sendError('User can not be found!');
+            return $this->sendError('Something went wrong!', $response["errors"]);
+        }
+    }
+
+    public function upgradeRole_user(Request $request, $id)
+    {
+        $response = $this->userRepository->upgradeRole($request, $id);
+        if($response["success"]) {
+            return $this->sendResponse(new UserResource($response["data"]), 'User role is succefully updated');
+        }else {
+            return $this->sendError('Something went wrong!', $response["errors"]);
         }
     }
 
@@ -64,33 +82,126 @@ class AdminDashboardController extends BaseController
 
     public function travel_create(Request $request)
     {
-        $travel = $this->travelRepository->createByRequest($request);
-        if($travel) {
-            return $this->sendResponse(new TravelResource($travel), 'Succefully created the travel!');
+        $response = $this->travelRepository->createByRequest($request);
+        if($response["success"]) {
+            return $this->sendResponse(new TravelResource($response["data"]), 'Succefully created the travel!');
         }else {
-            return $this->sendError('Something went wrong!');
+            return $this->sendError('Something went wrong!', $response["errors"]);
         }
     }
 
     public function travel_update(Request $request, $id)
     {
-        
-        $travel = $this->travelRepository->updateByRequest($request, $id);
-        if($travel) {
-            return $this->sendResponse(new TravelResource($travel), 'Travel succefully updated!');
+        $response = $this->travelRepository->updateByRequest($request, $id);
+        if($response["success"]) {
+            return $this->sendResponse(new TravelResource($response["data"]), 'Travel succefully updated!');
         }else {
-            return $this->sendError('Something went wrong!');
+            return $this->sendError('Something went wrong!', $response["errors"]);
         }
     }
 
     public function travel_delete($id)
     {
-        $travel = $this->travelRepository->deleteById($id);
-        if($travel) {
-            return $this->sendResponse(new TravelResource($travel), 'Travel succefully deleted!');
+        $response = $this->travelRepository->deleteById($id);
+        if($response["success"]) {
+            return $this->sendResponse(new TravelResource($response["data"]), 'Travel succefully deleted!');
+        }else {
+            return $this->sendError('Something went wrong!', $response["errors"]);
+        }
+    }
+
+    public function stations()
+    {
+        $stations = $this->stationRepository->all();
+        return $this->sendResponse(StationResource::collection($stations), 'Succefully retreived all the stations!');
+    }
+
+    public function station_create(Request $request)
+    {
+        $station = $this->stationRepository->createByRequest($request);
+        if($station) {
+            return $this->sendResponse(new StationResource($station), 'The station is succefully created!');
         }else {
             return $this->sendError('Something went wrong!');
         }
     }
+
+    public function station_update(Request $request, $id)
+    {
+        $response = $this->stationRepository->updateByRequest($request, $id); 
+        if($response["success"]) {
+            return $this->sendResponse(new StationResource($response["data"]), 'Station is succefully updated!');
+        }else {
+            return $this->sendError('Something went wrong!', $response["errors"]);
+        }
+
+    }
+
+    public function station_delete($id) {
+        $response = $this->stationRepository->deleteById($id);
+        if($response["success"]) {
+            return $this->sendResponse(new StationResource($response["data"]), 'Station is succefully deleted!');
+        }else {
+            return $this->sendError('Something went wrong!', $response["errors"]);
+        }
+    }
+   
+    public function station_restore($id)
+    {
+        $response = $this->stationRepository->restoreById($id);
+        if($response["success"]) {
+            return $this->sendResponse(new StationResource($response["data"]), 'Station is sucefully restored!');
+        }else {
+            return $this->sendError('Something went wrong!', $response["errors"]);
+        }
+    }
+
+    public function station_destroy($id) {
+        $response = $this->stationRepository->destroyById($id);
+
+        if($response["success"]) {
+            return $this->sendResponse(new StationResource($response["data"]), 'Station is succefully permanantly deleted!');
+        }else {
+            return $this->sendError('Something went wrong!', $response["errors"]);
+        }
+    }
+
+
+    public function tickets()
+    {
+        $tickets = $this->ticketRepository->all();
+        return $tickets;
+        if($tickets) {
+            return $this->sendResponse(TicketResource::collection($tickets), 'Tickets succefully retrieved!');
+        }else {
+            return $this->sendError('Something went wrong!');
+        }
+    }
+
+    public function tickets_nonExpired()
+    {
+        $tickets = $this->ticketRepository->getTicketsNonExpired();
+        
+        if($tickets) {
+            return $this->sendResponse(TicketResource::collection($tickets), 'Succefully retreived tickets!');
+        }else {
+            return $this->sendError('Something went wrong!');
+        }
+    }
+
+    public function ticket_get($id)
+    {
+        $response = $this->ticketRepository->getById($id);
+        if($response["success"]) {
+            return $this->sendResponse(new TicketResource($response["data"]), 'Succefully retrieved the ticket!');
+        }else {
+            return $this->sendError('Something went wrong!',$response["errors"]);
+        }
+    }
+
+
+
+
+   
 
 }

@@ -3,18 +3,15 @@ namespace App\Http\Repositories;
 
 use App\Models\User;
 use Illuminate\Support\Facades\Validator;
-use Illuminate\Support\Facades\Hash;
-use Illuminate\Validation\Rule;
-
 Class UserRepository 
 {
     public function all()
     {
-        $query = User::all()->reject(function($user) {
-            return ($user->id == auth()->user()->id);
+        $user = User::all()->reject(function($user) {
+            return ($user->deleted_at != NULL || $user->id == auth()->user()->id);
         });
 
-        return $query;
+        return $user;
     }
 
     public function update_userInfos($request){
@@ -66,29 +63,73 @@ Class UserRepository
 
     public function deleteById($id)
     {
-        $query = User::find($id);
-        if($query) {
-            $query->delete();
+        $response = [];
+        $user = User::find($id);
+        if($user) {
+            $user->delete();
+            $response["success"] = true;
+            $response["data"] = $user;
+            return $response;
         }
-        return $query;
+        $response["success"] = false;
+        $response["errors"] = "User can not be found!";
+        return $response;
     }
 
     public function restoreById($id)
     {
-        $query = User::onlyTrashed()->where('id', $id)->first();
-        if($query) {
-            $query->restore();
+        $response = [];
+        $user = User::onlyTrashed()->where('id', $id)->first();
+        if($user) {
+            $user->restore();
+            $response["success"] = true;
+            $response["data"] = $user;
+            return $response;
         }
-        return $query;
+        $response["success"] = false;
+        $response["errors"] = "User can not be found!";
+        return $response;
     }
 
     public function destoryById($id)
     {
-        $query = User::onlyTrashed()->where('id',$id)->first();
-        if($query) {
-            $query->forceDelete();
+        $response = [];
+        $user = User::onlyTrashed()->where('id',$id)->first();
+        if($user) {
+            $user->forceDelete();
+            $response["success"] = true;
+            $response["data"] = $user;
+            return $response;
         }
-        return $query;
+        $response["success"] = false;
+        $response["errors"] = "User can not be found!";
+        return $response;
+    }
+
+    public function upgradeRole($request, $id)
+    {
+        $response = [];
+        $validator = Validator::make($request->all(), [
+            'role' => 'exists:roles,id'
+        ]);
+
+        if($validator->fails()) {
+            $response["success"] = false;
+            $response["errors"] = $validator->errors();
+            return $response;
+        }
+        
+        $user = User::find($id);
+        if($user) {
+            $user->role_id = $request->role;
+            $user->save();
+            $response["success"] = true;
+            $response["data"] = $user;
+            return $response;
+        }
+        $response["success"] = false;
+        $response["errors"] = "User can not be found!";
+        return $response;
     }
 }
 
