@@ -3,14 +3,11 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Validator;
 use App\Models\User;
 use App\Models\Role;
-use App\Http\Repositories\UserRepository;
 use App\Http\Resources\UserResource;
-use function PHPUnit\Framework\isEmpty;
 
 class AuthController extends BaseController
 {   
@@ -63,7 +60,7 @@ class AuthController extends BaseController
         if(!$user || !Hash::check($request->password,$user->password)){
             return $this->sendError("No user found with the specified data");
         }
-
+        
         $token = $user->createToken('myapptoken')->plainTextToken;
         $result = [
             'user' => new UserResource($user),

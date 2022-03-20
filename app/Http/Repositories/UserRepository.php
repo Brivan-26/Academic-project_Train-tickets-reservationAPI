@@ -17,11 +17,9 @@ Class UserRepository
         return $query;
     }
 
-    public function update_userInfos($request, $id){
+    public function update_userInfos($request){
+        $id = auth()->user()->id;
         $auth = User::find($id);
-        if(!$auth){
-            return null;
-        }
         $validator = Validator::make($request->all(), [
             'phone_number' => [
                 'required','string',
@@ -47,11 +45,9 @@ Class UserRepository
         return $auth;
     }
     
-    public function update_userPassword($request, $id){
+    public function update_userPassword($request){
+        $id = auth()->user()->id;
         $auth = User::find($id);
-        if(!$auth){
-            return null;
-        }
         $validator = Validator::make($request->all(), [
             'current_password' => 'required|string',
             'password' => 'required|string|min:8',

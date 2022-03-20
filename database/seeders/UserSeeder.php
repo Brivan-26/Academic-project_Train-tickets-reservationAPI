@@ -30,13 +30,25 @@ class UserSeeder extends Seeder
         }
 
         DB::table('users')->insert([
-            'phone_number' => '0000000',
+            'phone_number' => '1111111',
             'first_name' => 'admin',
             'last_name' => 'admin',
             'password' => Hash::make('12345678'),
             'role_id' => Role::where('name', 'admin')->pluck('id')->first(),
             'account_confirmed' => 0
         ]);
+
+        $supportRole = Role::where('name','support')->pluck('id')->first();
+        for ($i=0; $i<5; $i++){
+            DB::table('users')->insert([
+                'phone_number' => '0000'.$i,
+                'first_name' => 'support'.$i,
+                'last_name' => 'support'.$i,
+                'password' => Hash::make('12345678'),
+                'role_id' => $supportRole,
+                'account_confirmed' => 0
+            ]);
+        }
         
     }
 }

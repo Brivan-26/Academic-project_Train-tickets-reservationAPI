@@ -9,7 +9,7 @@ class Support_ticket extends Model
 {
     use HasFactory;
     
-    protected $fillable = ['user_id', 'description', 'is_assigned', 'is_active'];
+    protected $fillable = ['user_id', 'description', 'assigned_to', 'is_active'];
 
     public function user()
     {
@@ -18,7 +18,11 @@ class Support_ticket extends Model
 
     public function assigned_to()
     {
-        return $this->belongsTo(User::class,'is_assigned');
+        return $this->belongsTo(User::class,'assigned_to');
+    }
+
+    public function answers(){
+        return $this->hasMany(Support_tickets_answer::class);
     }
 
 }

@@ -18,7 +18,7 @@ class UserController extends BaseController
 
     public function update_infos(Request $request)
     {
-        $user = $this->userRepository->update_userInfos($request, auth()->user()->id);
+        $user = $this->userRepository->update_userInfos($request);
         if ($user){
             return $this->sendResponse(new UserResource($user), "Account updated successfully");
         }
@@ -27,7 +27,7 @@ class UserController extends BaseController
 
     public function update_password(Request $request)
     {
-        $user = $this->userRepository->update_userPassword($request, auth()->user()->id);
+        $user = $this->userRepository->update_userPassword($request);
         if ($user){
             return $this->sendResponse(new UserResource($user), "Password updated successfully");
         }

@@ -2,6 +2,7 @@
 
 namespace Database\Seeders;
 
+use App\Models\Support_ticket;
 use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
 
@@ -17,6 +18,8 @@ class DatabaseSeeder extends Seeder
         // \App\Models\User::factory(10)->create();
         $this->call(RoleSeeder::class);
         $this->call(UserSeeder::class);
-        $this->call(TravelSeeder::class);
+        // $this->call(TravelSeeder::class);
+        // $this->call(Support_ticketSeeder::class);
+        // $this->call(Support_ticket_answerSeeder::class);
     }
 }

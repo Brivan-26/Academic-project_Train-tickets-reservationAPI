@@ -52,14 +52,9 @@ class User extends Authenticatable
             return $this->hasMany(Support_ticket::class);
         }
         if ($this->is_support()){
-            return $this->hasMany(Support_ticket::class,'is_assigned');
+            return $this->hasMany(Support_ticket::class,'assigned_to');
         }
         return null;
-    }
-
-    public function support_tickets_answers()
-    {
-        return $this->hasMany(Support_tickets_answer::class);
     }
 
     public function is_admin(){
@@ -72,5 +67,9 @@ class User extends Authenticatable
 
     public function is_passenger(){
         return ($this->role->name=="passenger");
+    }
+
+    public function hasAnyRole($roles){
+        return $this->role()->whereIn('name', $roles)->first();
     }
 }
