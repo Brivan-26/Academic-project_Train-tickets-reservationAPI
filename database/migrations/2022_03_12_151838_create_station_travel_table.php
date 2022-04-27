@@ -18,9 +18,10 @@ return new class extends Migration
             $table->unsignedBigInteger('station_id');
             $table->unsignedBigInteger('travel_id');
             $table->timestamp('arrival_time');
+            $table->integer("passengers_on_board");
+            $table->integer("firstClass_passengers_on_board");
+            $table->integer("secondClass_passengers_on_board");
             $table->timestamps();
-
-
             $table->foreign('station_id')->references('id')->on('stations')->onDelete('cascade');
             $table->foreign('travel_id')->references('id')->on('travels')->onDelete('cascade');
         });

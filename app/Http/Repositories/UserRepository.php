@@ -2,8 +2,10 @@
 namespace App\Http\Repositories;
 
 use App\Models\User;
+use Illuminate\Validation\Rule;
 use Illuminate\Support\Facades\Validator;
-Class UserRepository 
+use Illuminate\Support\Facades\Hash;
+Class UserRepository
 {
     public function all()
     {
@@ -28,7 +30,7 @@ Class UserRepository
         if($validator->fails()){
             return null;
         }
-        $user = User::where(['first_name' => $request->first_name, 
+        $user = User::where(['first_name' => $request->first_name,
                             'last_name' => $request->last_name])
                             ->where('id','!=',$id)
                             ->first();
@@ -41,7 +43,7 @@ Class UserRepository
         $auth->save();
         return $auth;
     }
-    
+
     public function update_userPassword($request){
         $id = auth()->user()->id;
         $auth = User::find($id);
@@ -118,7 +120,7 @@ Class UserRepository
             $response["errors"] = $validator->errors();
             return $response;
         }
-        
+
         $user = User::find($id);
         if($user) {
             $user->role_id = $request->role;

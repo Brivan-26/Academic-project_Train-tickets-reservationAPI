@@ -12,9 +12,7 @@ class Classe extends Model
     protected $fillable = [
         'travel_id',
         'firstClass_limitPlaces',
-        'secondClass_limitPlaces',
-        'firstClass_vacancies',
-        'secondClass_vacancies'
+        'secondClass_limitPlaces'
     ];
 
     public function travel()
