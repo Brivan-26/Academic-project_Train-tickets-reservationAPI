@@ -18,19 +18,21 @@ class UserController extends BaseController
 
     public function update_infos(Request $request)
     {
-        $user = $this->userRepository->update_userInfos($request);
-        if ($user){
-            return $this->sendResponse(new UserResource($user), "Account updated successfully");
+        $response = $this->userRepository->update_userInfos($request);
+        if ($response['success']){
+            return $this->sendResponse(new UserResource($response['data']), 
+            "Account info updated successfully");
         }
-        return $this->sendError("Something went wrong");
+        return $this->sendError("Something went wrong",$response['errors']);
     }
 
     public function update_password(Request $request)
     {
-        $user = $this->userRepository->update_userPassword($request);
-        if ($user){
-            return $this->sendResponse(new UserResource($user), "Password updated successfully");
+        $response = $this->userRepository->update_userPassword($request);
+        if ($response['success']){
+            return $this->sendResponse(new UserResource($response['data']), 
+            "Password updated successfully");
         }
-        return $this->sendError("Something went wrong");
+        return $this->sendError("Something went wrong",$response['errors']);
     }
 }

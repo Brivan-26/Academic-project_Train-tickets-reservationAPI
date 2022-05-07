@@ -4,7 +4,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\AdminDashboardController;
-use App\Http\Controllers\SupportDashboardController;
+use App\Http\Controllers\SupportDashBoardController;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\ReservationController;
 use App\Models\Role;
@@ -26,8 +26,8 @@ use Illuminate\Support\Facades\Auth;
 Route::controller(AuthController::class)->group(function(){
 
      //authentification routes
-    Route::post('/register', 'register');
-    Route::post('/login', 'login');
+    Route::post('/register', 'register')->middleware("guest");
+    Route::post('/login', 'login')->middleware("guest");
     Route::post('/logout', 'logout')->middleware("auth:sanctum");
 
 });
@@ -70,13 +70,11 @@ Route::prefix('user')->middleware("auth:sanctum")->controller(UserController::cl
 
 });
 
-Route::prefix('support')->middleware("auth:sanctum")->controller(SupportDashboardController::class)->group(function(){
+Route::prefix('support')->middleware(["auth:sanctum", "can:is_supportORpassenger"])->controller(SupportDashBoardController::class)->group(function(){
 
-    Route::group(['middleware' => 'can:acces-supportDashboard'],function(){
         Route::get('/my_supportTickets','supportTickets_get');
         Route::get('/support_ticket/answers/{id}','supportTicketAnswers_get');
         Route::post('/support_ticket/answer/{id}','supportTicketAnswer_add');
-    });
 
     Route::group(['middleware' => 'can:is_support'], function(){
         Route::get('/support_tickets/all', 'index');
@@ -88,8 +86,14 @@ Route::prefix('support')->middleware("auth:sanctum")->controller(SupportDashboar
 
 });
 
+
 Route::get('/test',function(){
+<<<<<<< HEAD
     return Support_ticket::find(1)->answers;
 });
 
 Route::any('/essai2', [ReservationController::class, 'AvAndP']);
+=======
+    return ["succes"=> auth('sanctum')->check()];
+});
+>>>>>>> c97e6bd49a88cc2905f2c17db80d98bde4430a2d

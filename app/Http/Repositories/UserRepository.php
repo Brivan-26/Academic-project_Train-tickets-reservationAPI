@@ -17,8 +17,8 @@ Class UserRepository
     }
 
     public function update_userInfos($request){
-        $id = auth()->user()->id;
-        $auth = User::find($id);
+        $response = [];
+        $id = auth()->user()->id ;
         $validator = Validator::make($request->all(), [
             'phone_number' => [
                 'required','string',
@@ -28,39 +28,40 @@ Class UserRepository
             'last_name' => ['required','string','min:4','max:10'],
         ]);
         if($validator->fails()){
-            return null;
+            $response['success'] = false ;
+            $response['errors'] = $validator->errors();
         }
-        $user = User::where(['first_name' => $request->first_name,
-                            'last_name' => $request->last_name])
-                            ->where('id','!=',$id)
-                            ->first();
-        if($user){
-            return null;
+        else{
+            $auth = User::find($id);
+            $auth->phone_number = $request->phone_number;
+            $auth->first_name = $request->first_name;
+            $auth->last_name = $request->last_name;
+            $auth->save();
+            $response['success'] = true ;
+            $response['data'] = $auth;
         }
-        $auth->phone_number = $request->phone_number;
-        $auth->first_name = $request->first_name;
-        $auth->last_name = $request->last_name;
-        $auth->save();
-        return $auth;
+        return $response;
     }
 
     public function update_userPassword($request){
         $id = auth()->user()->id;
-        $auth = User::find($id);
         $validator = Validator::make($request->all(), [
-            'current_password' => 'required|string',
+            'current_password' => 'required|string|current_password', 
             'password' => 'required|string|min:8',
             'confirm_password' => 'required|string|same:password',
         ]);
         if($validator->fails()){
-            return null;
+            $response['success'] = false ;
+            $response['errors'] = $validator->errors();
         }
-        if(!Hash::check($request->current_password,$auth->password)){
-            return null;
+        else{
+            $auth = User::find($id);
+            $auth->password = Hash::make($request->password);
+            $auth->save();
+            $response['success'] = true;
+            $response['data'] =$auth;
         }
-        $auth->password = Hash::make($request->password);
-        $auth->save();
-        return $auth;
+        return $response;
     }
 
     public function deleteById($id)

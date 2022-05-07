@@ -21,11 +21,13 @@ class Support_ticketSeeder extends Seeder
                 'user_id' => rand(1,20),
                 'assigned_to' => rand(22,26),
                 'description' => 'support_ticket'.$i,
+                'title' => 'support_ticket'.$i,
             ]);
         }
         DB::table('support_tickets')->insert([
             'user_id' => rand(1,20),
             'description' => 'support_ticket6',
+            'title' => 'support_ticket7',
         ]);
     }
 }

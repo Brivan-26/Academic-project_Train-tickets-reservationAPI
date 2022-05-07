@@ -17,6 +17,7 @@ return new class extends Migration
             $table->bigIncrements('id');
             $table->foreignId('user_id')->constrained()->onDelete('cascade');
             $table->text('description');
+            $table->text('title');
             $table->unsignedBigInteger('assigned_to')->nullable()->default(null);
             $table->boolean('is_active')->default(1);
             $table->timestamps();
