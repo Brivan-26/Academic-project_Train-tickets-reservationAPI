@@ -1,5 +1,9 @@
 <?php
 
+namespace App\Http\Tools;
+
+use App\Http\Controllers\PaymentController;
+use App\Http\Controllers\ReservationController;
 use Illuminate\Support\Facades\Route;
 /*
 |--------------------------------------------------------------------------
@@ -16,3 +20,5 @@ Route::get('/', function () {
     return view('welcome');
 });
 
+Route::view('/essai', 'pay.paypage');
+Route::post('/success', [PaymentController::class, 'create'])->name('success');

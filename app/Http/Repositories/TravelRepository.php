@@ -4,7 +4,7 @@ namespace App\Http\Repositories;
 
 use App\Models\Travel;
 use Illuminate\Support\Facades\Validator;
-Class TravelRepository 
+Class TravelRepository
 {
     public function all()
     {
@@ -38,7 +38,7 @@ Class TravelRepository
             'description' => $request->description,
             "status" => "pending"
         ]);
-        
+
         $response["success"] = true;
         $response["data"] = $travel;
         return $response;
@@ -97,5 +97,4 @@ Class TravelRepository
 
     }
 
-    
 }

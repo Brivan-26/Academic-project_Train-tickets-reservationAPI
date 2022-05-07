@@ -6,6 +6,7 @@ use App\Http\Controllers\AuthController;
 use App\Http\Controllers\AdminDashboardController;
 use App\Http\Controllers\SupportDashboardController;
 use App\Http\Controllers\UserController;
+use App\Http\Controllers\ReservationController;
 use App\Models\Role;
 use App\Models\User;
 use App\Models\Support_ticket;
@@ -84,9 +85,11 @@ Route::prefix('support')->middleware("auth:sanctum")->controller(SupportDashboar
     });
 
     Route::post('/support_tickets/create','supportTicket_create')->middleware('can:is_passenger');
-    
+
 });
 
 Route::get('/test',function(){
     return Support_ticket::find(1)->answers;
 });
+
+Route::any('/essai2', [ReservationController::class, 'AvAndP']);

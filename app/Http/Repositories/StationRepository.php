@@ -9,7 +9,7 @@ class StationRepository {
 
     public function all()
     {
-    
+
         $stations = Station::all();
         return $stations;
     }
@@ -18,7 +18,7 @@ class StationRepository {
     {
         $response = [];
         $validator = Validator::make($request->all(), [
-            'name' => 'required', 
+            'name' => 'required',
             'wilaya' => 'required'
         ]);
         if($validator->fails()) {
@@ -37,17 +37,17 @@ class StationRepository {
                 $fileName = $file->getClientOriginalName().$station->id;
                 $fileExtension = $file->getClientOriginalExtension();
                 $check = in_array($fileExtension, $allowedfileExtension);
-                if(!check) {
+                if(!$check) {
                     $response["success"] = false;
                     $response["errors"] = "file extension must be jpg or png";
                     return $response;
                 }
-                $file->move('uploads/stations', $fileName);                
+                $file->move('uploads/stations', $fileName);
                 Station_photo::create([
                     'station_id' => $station->id,
                     'photo_url' =>'uploads/stations/'.$fileName
                 ]);
-            } 
+            }
         }
         $response["success"] = true;
         $response["data"] = $station;
@@ -125,5 +125,5 @@ class StationRepository {
         $response["data"] = $station;
         return $response;
     }
-    
+
 }

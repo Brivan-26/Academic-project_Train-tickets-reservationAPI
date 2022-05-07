@@ -18,8 +18,6 @@ return new class extends Migration
             $table->unsignedBigInteger('travel_id');
             $table->integer('firstClass_limitPlaces');
             $table->integer('secondClass_limitPlaces');
-            $table->integer('firstClass_vacancies');
-            $table->integer('secondClass_vacancies');
             $table->timestamps();
 
             $table->foreign('travel_id')->references('id')->on('travels')->onDelete('cascade');
