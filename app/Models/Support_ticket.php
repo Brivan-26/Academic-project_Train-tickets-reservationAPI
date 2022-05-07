@@ -9,7 +9,7 @@ class Support_ticket extends Model
 {
     use HasFactory;
     
-    protected $fillable = ['user_id', 'description', 'assigned_to', 'is_active'];
+    protected $fillable = ['user_id', 'description', 'title', 'assigned_to', 'is_active'];
 
     public function user()
     {

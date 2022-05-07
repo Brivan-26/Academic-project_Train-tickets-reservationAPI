@@ -21,52 +21,51 @@ class SupportDashBoardController extends BaseController
     }
 
     public function supportTicket_create(Request $request){
-        $ticket = $this->support_ticketRepository->createByRequest($request);
-        return $this->sendResponse(new Support_ticketResource($ticket),
+        $response = $this->support_ticketRepository->createByRequest($request);
+        return $this->sendResponse(new Support_ticketResource($response['data']),
                                     "Support ticket created successfully");
     }
 
     public function supportTicket_assign($id){
-        $ticket = $this->support_ticketRepository->assignById($id);
-        if(!$ticket){
-            return $this->sendError("Something went wrong");
+        $response = $this->support_ticketRepository->assignById($id);
+        if($response['success']){
+            return $this->sendResponse(new Support_ticketResource($response['data']),
+            "Support ticket assigned successfully");
         }
-        return $this->sendResponse(new Support_ticketResource($ticket),
-                                    "Support ticket assigned successfully");
+        return $this->sendError("Something went wrong !",$response['errors']);
     }
 
-
     public function supportTicket_disable($id){
-        $ticket = $this->support_ticketRepository->render_inactiveById($id);
-        if(!$ticket){
-            return $this->sendError("Something went wrong");
+        $response = $this->support_ticketRepository->render_inactiveById($id);
+        if($response['success']){
+            return $this->sendResponse(new Support_ticketResource($response['data']),
+            "Support ticket disabled successfully");
         }
-        return $this->sendResponse(new Support_ticketResource($ticket),
-                                    "Support ticket disabled successfully");
+        return $this->sendError("Something went wrong !",$response['errors']);
     }
 
     public function supportTickets_get(){
         $tickets = $this->support_ticketRepository->get_supportTickets();
         return $this->sendResponse(Support_ticketResource::collection($tickets),
-                                    "Support ticket retreived successfully");
+                                    "Personnal support tickets retreived successfully");
     }
 
     public function supportTicketAnswer_add(Request $request, $id){
-        $answers = $this->support_ticketRepository->add_answerByRequest($request, $id);
-        if(!$answers){
-            return $this->sendError("Something went wrong");
+        $response = $this->support_ticketRepository->add_answerByRequest($request, $id);
+        if($response['success']){
+            return $this->sendResponse(Support_tickets_answerResource::collection($response['data']),
+            "answer added successfully");
         }
-        return $this->sendResponse(Support_tickets_answerResource::collection($answers),
-                                    "answer added successfully");
+        return $this->sendError("Something went wrong !",$response['errors']);
     }
 
     public function supportTicketAnswers_get($id){
-        $answers = $this->support_ticketRepository->get_answersById($id);
-        if(!$answers){
-            return $this->sendError("Something went wrong");
+        $response = $this->support_ticketRepository->get_answersById($id);
+        if($response['success']){
+            return $this->sendResponse(Support_tickets_answerResource::collection($response['data']),
+            "Support ticket answers retreived successfully");
         }
-        return $this->sendResponse(Support_tickets_answerResource::collection($answers),
-                                    "answers retreived successfully");
+        return $this->sendError("Something went wrong !",$response['errors']);
     }
 
 }

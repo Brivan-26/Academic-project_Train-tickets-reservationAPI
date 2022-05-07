@@ -7,49 +7,67 @@ use App\Models\Support_tickets_answer;
 
 class Support_ticketRepository{
 
+    private function is_supportTicketOwner(Support_ticket $ticket){
 
-    private function is_supportTicketOwner($id){
-        $ticket = Support_ticket::find($id);
-        if (!$ticket){
-            return false;
-        }
         return (auth()->user()->id==$ticket->user_id||auth()->user()->id==$ticket->assigned_to);
     }
+
     public function all(){
-        return $support_tickets = Support_ticket::all();
+        return Support_ticket::all();
     }
 
     public function createByRequest($request){
+        $response = [];
         $ticket =Support_ticket::create([
+            'title' => $request['title'],
             'description' => $request['description'],
             'user_id' => auth()->user()->id,
             'is_active' => 0,
             'assigned_to' => null
         ]);
-        return $ticket;
+        $response['success'] = true;
+        $response['data'] = $ticket;
+        return $response;
     }
 
     public function assignById($id){
+        $reponse = [];
         $ticket = Support_ticket::find($id);
         if(!$ticket){
-            return null;
+            $reponse['success'] = false ;
+            $reponse['errors'] = "No support found with specified id !";
         }
-        if($ticket->assigned_to){
-            return null;
+        else if($ticket->assigned_to){
+            $reponse['success'] = false ;
+            $reponse['errors'] = "Support ticket already assigned !";
         }
-        $ticket->assigned_to = auth()->user()->id;
-        $ticket->save();
-        return $ticket;
+        else {
+            $ticket->assigned_to = auth()->user()->id;
+            $ticket->save();
+            $reponse['success'] = true ;
+            $reponse['data'] = $ticket;
+        }
+        return $reponse;
     }
 
     public function render_inactiveById($id){
-        if(!$this->is_supportTicketOwner($id)){
-            return null;
-        }
+        $response = [];
         $ticket = Support_ticket::find($id);
-        $ticket->is_active = 0;
-        $ticket->save();
-        return $ticket;
+        if(!$ticket){
+            $reponse['success'] = false ;
+            $reponse['errors'] = "No support found with specified id !";
+        }
+        else if($ticket->assigned_to != auth()->user()->id){
+            $reponse['success'] = false ;
+            $reponse['errors'] = "U dont have rights for this action";
+        }
+        else {
+            $ticket->is_active = false;
+            $ticket->save();
+            $reponse['success'] = true ;
+            $reponse['data'] = $ticket;
+        }
+        return $reponse;
     }
 
     public function get_supportTickets(){
@@ -57,25 +75,43 @@ class Support_ticketRepository{
     }
     
     public function add_answerByRequest($request, $id){
-        if(!$this->is_supportTicketOwner($id)){
-            return null;
-        }
         $ticket = Support_ticket::find($id);
-        $answer = Support_tickets_answer::create([
-            'support_ticket_id' => $id,
-            'from' => auth()->user()->id,
-            'to' => $request['to_id'],
-            'content' => $request['content']
-        ]); 
-        return $this->get_answersById($id);
+        if(!$ticket){
+            $reponse['success'] = false ;
+            $reponse['errors'] = "No support found with specified id !";
+        }
+        else if(! $this->is_supportTicketOwner($ticket) ){
+            $reponse['success'] = false ;
+            $reponse['errors'] = "U dont have rights for this action";
+        }
+        else{   
+            Support_tickets_answer::create([
+                'support_ticket_id' => $id,
+                'from' => auth()->user()->id,
+                'to' => $request['to'],
+                'content' => $request['content']
+            ]);
+            $reponse['success'] = true ;
+            $reponse['data'] = $ticket->answers;
+        }
+        return $reponse;
     }
 
     public function get_answersById($id){
-        if(!$this->is_supportTicketOwner($id)){
-            return null;
-        }
         $ticket = Support_ticket::find($id);
-        return $ticket->answers;
+        if(!$ticket){
+            $reponse['success'] = false ;
+            $reponse['errors'] = "No support found with specified id !";
+        }
+        else if(! $this->is_supportTicketOwner($ticket) ){
+            $reponse['success'] = false ;
+            $reponse['errors'] = "U dont have rights for this action";
+        }
+        else{
+            $reponse['success'] = true ;
+            $reponse['data'] = $ticket->answers;
+        }
+        return $reponse;
     }
 
 }

@@ -21,7 +21,8 @@ class Support_ticketResource extends JsonResource
             'user_id' => $this->user_id,
             'assigned_to' => $this->assigned_to,
             'is_active' => $this->is_active,
-            'description' => $this->description
+            'description' => $this->description,
+            'title' => $this->title
         ];
     }
 }

@@ -3,6 +3,7 @@
 namespace App\Providers;
 
 use App\Models\Support_ticket;
+use Illuminate\Auth\Access\Response;
 use Illuminate\Foundation\Support\Providers\AuthServiceProvider as ServiceProvider;
 use Illuminate\Support\Facades\Gate;
 use App\Models\User;
@@ -39,7 +40,7 @@ class AuthServiceProvider extends ServiceProvider
             return $user->is_passenger();
         });
 
-        Gate::define('acces-supportDashboard', function(User $user){
+        Gate::define('is_supportORpassenger', function(User $user){
             return $user->hasAnyRole(["support","passenger"]);
         });
     }
