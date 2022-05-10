@@ -7,7 +7,7 @@ use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Facades\Hash;
 Class UserRepository
 {
-    public function all()
+    public static function all()
     {
         $user = User::all()->reject(function($user) {
             return ($user->deleted_at != NULL || $user->id == auth()->user()->id);
