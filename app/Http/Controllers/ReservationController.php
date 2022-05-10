@@ -35,7 +35,7 @@ class ReservationController extends BaseController
                 if($request->classe=='F'){
                     $value = DB::table('station_travel')->where('travel_id', $travelId)
                                                         ->where('station_id', $station->id)->value('firstClass_passengers_on_board');
-                    $value++;
+                    $value+=$request->nb;
                     DB::table('station_travel')->where('travel_id', $travelId)
                                                ->where('station_id', $station->id)->update([
                         'firstClass_passengers_on_board' => $value

@@ -1,14 +1,12 @@
 <?php
 
-
+use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\AdminDashboardController;
 use App\Http\Controllers\SupportDashBoardController;
 use App\Http\Controllers\UserController;
-use App\Http\Controllers\TravelController;
-use App\Http\Resources\ReviewResource;
-use App\Models\Review;
+
 
 /*
 |--------------------------------------------------------------------------
@@ -81,16 +79,5 @@ Route::prefix('support')->middleware(["auth:sanctum", "can:is_supportORpassenger
     });
 
     Route::post('/support_tickets/create','supportTicket_create')->middleware('can:is_passenger');
-
-});
-
-Route::prefix('reviews')->middleware("auth:sanctum")->controller(TravelController::class)->group(function(){
-
-    Route::get('/all/{id}','reviews_get');
-    Route::post('/add','review_add');
-
-});
-
-Route::get('/test',function(){
-    return ReviewResource::collection(Review::all());
+    
 });

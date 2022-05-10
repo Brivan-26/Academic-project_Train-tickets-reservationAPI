@@ -9,6 +9,7 @@
 <body>
     <form action="http://localhost:8000/success" method="post" id="payment-form">
         @csrf
+        name: <input type='text' name='name'>
         number: <input type='text' name='nb'>
         tid: <input type='text' name='tid'>
         classe: <input type='text' name='classe'>

@@ -3,8 +3,11 @@ namespace App\Http\Repositories;
 
 use App\Models\User;
 use Illuminate\Validation\Rule;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Http\Request;
+
 Class UserRepository
 {
     public static function all()
@@ -46,7 +49,7 @@ Class UserRepository
     public function update_userPassword($request){
         $id = auth()->user()->id;
         $validator = Validator::make($request->all(), [
-            'current_password' => 'required|string|current_password', 
+            'current_password' => 'required|string|current_password',
             'password' => 'required|string|min:8',
             'confirm_password' => 'required|string|same:password',
         ]);
@@ -132,6 +135,28 @@ Class UserRepository
         }
         $response["success"] = false;
         $response["errors"] = "User can not be found!";
+        return $response;
+    }
+
+    public function validateAccount(Request $request){
+        $response=[];
+        $givenPin = $request->pin;
+        $id = auth('sanctum')->id();
+        $user = User::find($id);
+        if($request->cookie('pin')!=null){
+            if($givenPin==$request->cookie('pin')){
+                $user->account_confirmed = 1;
+                $user->save();
+                $response['success'] = true;
+                $response['data'] = $user;
+            } else {
+                $response['success'] = false;
+                $response['error'] = "Wrong PIN";
+            }
+        } else{
+            $response['success'] = false;
+            $response['error'] = "Some error occured";
+        }
         return $response;
     }
 }

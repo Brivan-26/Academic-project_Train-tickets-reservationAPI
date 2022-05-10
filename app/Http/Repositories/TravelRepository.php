@@ -3,7 +3,10 @@
 namespace App\Http\Repositories;
 
 use App\Models\Travel;
+use App\Http\Controllers\NotificationsController as Notif;
 use Illuminate\Support\Facades\Validator;
+use Illuminate\Http\Request;
+
 Class TravelRepository
 {
     public function all()
@@ -44,7 +47,7 @@ Class TravelRepository
         return $response;
     }
 
-    public function updateByRequest($request, $travelId) {
+    public function updateByRequest(Request $request, $travelId) {
         $response = [];
         $travel = Travel::find($travelId);
         if($travel) {
@@ -53,6 +56,7 @@ Class TravelRepository
                 'departure_time' => 'required',
                 'arrival_station' => 'required',
                 'distance' => 'required',
+                'status' => 'required',
                 'estimated_duration' => 'required',
                 'description' => 'required',
             ]);
@@ -67,7 +71,24 @@ Class TravelRepository
                 $travel->distance = $request->distance;
                 $travel->estimated_duration = $request->estimated_duration;
                 $travel->description = $request->description;
+                if($request->status=='delayed'){
+                    $travel->status = $request->status;
+                    $message = Notif::sendMessage("Travel delayed to {$request->departure_time}",
+                                                "the user was notified");
+                } else if($request->status=='cancelled'){
+                    $travel->status = $request->status;
+                    foreach($travel->tickets as $ticket){
+                        $stripe = new \Stripe\StripeClient(env('STRIPE_SECRET'));
+                        $stripe->refunds->create([
+                            'charge' => $ticket->payment_token,
+                        ]);
+                    }
+                    $message = Notif::sendMessage("Travel cancelled, refunded",
+                                                "the user was notified");
+                }
+                else $travel->status = $request->status;
                 $travel->save();
+                $response['notified'] = $message;
                 $response["success"] = true;
                 $response["data"] = $travel;
                 return $response;
