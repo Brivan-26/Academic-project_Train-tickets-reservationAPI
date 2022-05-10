@@ -21,4 +21,10 @@ class Support_tickets_answer extends Model
     public function support_ticket(){
         return $this->belongsTo(Support_ticket::class,'support_ticket_id');
     }
+    public function sender(){
+        return $this->belongsTo(Support_ticket::class,'from');
+    }
+    public function receiver(){
+        return $this->belongsTo(Support_ticket::class,'to');
+    }
 }

@@ -1,16 +1,14 @@
 <?php
 
-use Illuminate\Http\Request;
+
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\AdminDashboardController;
 use App\Http\Controllers\SupportDashBoardController;
 use App\Http\Controllers\UserController;
-use App\Http\Controllers\ReservationController;
-use App\Models\Role;
-use App\Models\User;
-use App\Models\Support_ticket;
-use Illuminate\Support\Facades\Auth;
+use App\Http\Controllers\TravelController;
+use App\Http\Resources\ReviewResource;
+use App\Models\Review;
 
 /*
 |--------------------------------------------------------------------------
@@ -86,14 +84,13 @@ Route::prefix('support')->middleware(["auth:sanctum", "can:is_supportORpassenger
 
 });
 
+Route::prefix('reviews')->middleware("auth:sanctum")->controller(TravelController::class)->group(function(){
+
+    Route::get('/all/{id}','reviews_get');
+    Route::post('/add','review_add');
+
+});
 
 Route::get('/test',function(){
-<<<<<<< HEAD
-    return Support_ticket::find(1)->answers;
+    return ReviewResource::collection(Review::all());
 });
-
-Route::any('/essai2', [ReservationController::class, 'AvAndP']);
-=======
-    return ["succes"=> auth('sanctum')->check()];
-});
->>>>>>> c97e6bd49a88cc2905f2c17db80d98bde4430a2d

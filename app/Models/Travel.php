@@ -25,6 +25,10 @@ class Travel extends Model
         return $this->hasMany(Ticket::class);
     }
 
+    public function reviews(){
+        return $this->hasMany(Review::class, 'travel_id');
+    }
+    
     public function stations()
     {
         return $this->belongsToMany(Station::class);
