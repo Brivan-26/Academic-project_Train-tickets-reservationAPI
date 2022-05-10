@@ -16,8 +16,8 @@ class PaymentController extends Tool
 
         \Stripe\Stripe::setApiKey(env('STRIPE_SECRET'));
 
-        //$id=Auth::id();
-        $user=User::find(95);
+        $id=auth('sanctum')->id();
+        $user=User::find($id);
 
         $stripe = new \Stripe\StripeClient(env('STRIPE_SECRET'));
         if($user->stripe_id==null){
@@ -59,10 +59,10 @@ class PaymentController extends Tool
         Ticket::create([
             'user_id' => $user->id,
             'travel_id' => $request->tid,
-            'passenger_name' => $user->first_name." ".$user->last_name,
+            'passenger_name' => $request->name,
             'travel_class' => $request->classe,
             'payment_method' => 'card',
-            'payment_token' => $request->stripeToken,
+            'payment_token' => $charge['id'],
             'validated' => false,
             'boarding_station' => $request->boarding_station,
             'landing_station' => $request->landing_station,

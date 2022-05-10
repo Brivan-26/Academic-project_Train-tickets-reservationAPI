@@ -4,12 +4,16 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\AdminDashboardController;
+use App\Http\Controllers\NotificationsController;
 use App\Http\Controllers\SupportDashBoardController;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\ReservationController;
+use App\Http\Repositories\TravelRepository;
+use App\Http\Repositories\UserRepository;
 use App\Models\Role;
 use App\Models\User;
 use App\Models\Support_ticket;
+use Illuminate\Notifications\Events\NotificationSending;
 use Illuminate\Support\Facades\Auth;
 
 /*
@@ -88,12 +92,12 @@ Route::prefix('support')->middleware(["auth:sanctum", "can:is_supportORpassenger
 
 
 Route::get('/test',function(){
-<<<<<<< HEAD
-    return Support_ticket::find(1)->answers;
-});
-
-Route::any('/essai2', [ReservationController::class, 'AvAndP']);
-=======
     return ["succes"=> auth('sanctum')->check()];
 });
->>>>>>> c97e6bd49a88cc2905f2c17db80d98bde4430a2d
+
+Route::post('/validate', [UserRepository::class, 'validateAccount']);
+
+Route::get('/pin', [NotificationsController::class, 'sendPin']);
+
+Route::post('/update2/{travelId}', [TravelRepository::class, 'updateByRequest']);
+

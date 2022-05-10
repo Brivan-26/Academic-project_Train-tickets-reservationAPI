@@ -25,7 +25,7 @@ class UserSeeder extends Seeder
                 'last_name' => 'last name'.$i,
                 'password' => Hash::make('12345678'),
                 'role_id' => $passengerRole,
-                'account_confirmed' => 0
+                'account_confirmed' => false
             ]);
         }
 
@@ -49,6 +49,6 @@ class UserSeeder extends Seeder
                 'account_confirmed' => 0
             ]);
         }
-        
+
     }
 }
