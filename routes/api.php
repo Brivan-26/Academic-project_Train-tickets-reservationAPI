@@ -87,13 +87,3 @@ Route::prefix('support')->middleware(["auth:sanctum", "can:is_supportORpassenger
 });
 
 
-Route::get('/test',function(){
-<<<<<<< HEAD
-    return Support_ticket::find(1)->answers;
-});
-
-Route::any('/essai2', [ReservationController::class, 'AvAndP']);
-=======
-    return ["succes"=> auth('sanctum')->check()];
-});
->>>>>>> c97e6bd49a88cc2905f2c17db80d98bde4430a2d
