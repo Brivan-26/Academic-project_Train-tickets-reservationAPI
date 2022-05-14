@@ -27,7 +27,6 @@ Route::controller(AuthController::class)->group(function(){
     Route::post('/logout', 'logout')->middleware("auth:sanctum");
 
 });
-
 Route::prefix('admin')->middleware(['auth:sanctum', 'can:is_admin'])->controller(AdminDashboardController::class)->group(function () {
         Route::get('/home', 'index');
 
@@ -82,10 +81,4 @@ Route::prefix('support')->middleware(["auth:sanctum", "can:is_supportORpassenger
     
 });
 
-Route::get('/test', function() {
-    return response()->json([
-        'success' => true,
-        'message' => 'Succefully communicated with the server!'
-    ]);
-});
 

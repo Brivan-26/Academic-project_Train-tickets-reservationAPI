@@ -11,6 +11,7 @@ Class TravelRepository
 {
     public function all()
     {
+        
         return Travel::where('status', '!=','completed')->get();
     }
 
