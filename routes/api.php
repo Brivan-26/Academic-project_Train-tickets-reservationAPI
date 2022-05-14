@@ -22,8 +22,8 @@ use App\Http\Controllers\UserController;
 Route::controller(AuthController::class)->group(function(){
 
      //authentification routes
-    Route::post('/register', 'register')->middleware("guest");
-    Route::post('/login', 'login')->middleware("guest");
+    Route::post('/register', 'register');
+    Route::post('/login', 'login');
     Route::post('/logout', 'logout')->middleware("auth:sanctum");
 
 });
@@ -81,3 +81,11 @@ Route::prefix('support')->middleware(["auth:sanctum", "can:is_supportORpassenger
     Route::post('/support_tickets/create','supportTicket_create')->middleware('can:is_passenger');
     
 });
+
+Route::get('/test', function() {
+    return response()->json([
+        'success' => true,
+        'message' => 'Succefully communicated with the server!'
+    ]);
+});
+
