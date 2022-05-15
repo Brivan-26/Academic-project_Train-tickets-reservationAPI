@@ -56,16 +56,26 @@ Route::prefix('admin')->middleware(['auth:sanctum', 'can:is_admin'])->controller
         Route::get('/tickets', 'tickets');
         Route::get('/tickets/nonExpired', 'tickets_nonExpired');
         Route::get('/ticket/{id}', 'ticket_get');
+
+        // Reviews
+        Route::get('reviews/{id}', 'reviews_get');
+
 });
 
-Route::prefix('user')->middleware("auth:sanctum")->controller(UserController::class)->group(function(){
+Route::prefix('user')->middleware("auth:sanctum")->controller(UserController::class)
+                                                 ->group(function(){
 
     Route::post('/update_infos','update_infos');
     Route::post('/update_password','update_password');
+    Route::group(['middleware' => 'can:is_passenger'], function(){
+        Route::post('/reviews/create/{id}', 'review_add');
+        Route::get('/my_travels', 'get_personnalTravels');
+    });
 
 });
 
-Route::prefix('support')->middleware(["auth:sanctum", "can:is_supportORpassenger"])->controller(SupportDashBoardController::class)->group(function(){
+Route::prefix('support')->middleware(["auth:sanctum", "can:is_supportORpassenger"])
+                        ->controller(SupportDashBoardController::class)->group(function(){
 
         Route::get('/my_supportTickets','supportTickets_get');
         Route::get('/support_ticket/answers/{id}','supportTicketAnswers_get');

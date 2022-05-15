@@ -3,7 +3,6 @@ namespace App\Http\Repositories;
 
 use App\Models\User;
 use Illuminate\Validation\Rule;
-use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Http\Request;
@@ -158,6 +157,14 @@ Class UserRepository
             $response['error'] = "Some error occured";
         }
         return $response;
+    }
+
+    public function get_travelsHistory(){
+        $user = User::find(auth()->user()->id);
+        return [
+            'succes' => true,
+            'data' => $user->travels()
+        ];
     }
 }
 

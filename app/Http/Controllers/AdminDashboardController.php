@@ -5,11 +5,13 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\Models\User;
 use App\Http\Resources\UserResource as UserResource;
+use App\Http\Resources\ReviewResource as ReviewResource;
 use App\Http\Resources\TravelResource as TravelResource;
 use App\Http\Resources\StationResource as StationResource;
 use App\Http\Resources\TicketResource as TicketResource;
 use App\Http\Controllers\BaseController as BaseController;
 use App\Http\Repositories\UserRepository;
+use App\Http\Repositories\ReviewRepository;
 use App\Http\Repositories\TravelRepository;
 use App\Http\Repositories\StationRepository;
 use App\Http\Repositories\TicketRepository;
@@ -19,12 +21,18 @@ class AdminDashboardController extends BaseController
     private $travelRepository;
     private $stationRepository;
     private $ticketRepository;
-    public function __construct(UserRepository $userRepository, TravelRepository $travelRepository, StationRepository $stationRepository, TicketRepository $ticketRepository)
+    private $reviewRepository;
+
+    public function __construct(UserRepository $userRepository, 
+                TravelRepository $travelRepository, StationRepository $stationRepository, 
+                TicketRepository $ticketRepository, ReviewRepository $reviewRepository)
     {
         $this->userRepository = $userRepository;
         $this->travelRepository = $travelRepository;
         $this->stationRepository = $stationRepository;
         $this->ticketRepository = $ticketRepository;
+        $this->reviewRepository = $reviewRepository;
+
     }
 
     public function index()
@@ -199,7 +207,14 @@ class AdminDashboardController extends BaseController
         }
     }
 
-
+    public function reviews_get($id){
+        $response = $this->reviewRepository->get_reviewsByTravelId($id);
+        if($response['success']){
+            return $this->sendResponse(ReviewResource::collection($response['data']),
+            "Reviews retreived successfully");
+        }
+        return $this->sendError("Something went wrong !",$response['errors']);
+    }
 
 
    
