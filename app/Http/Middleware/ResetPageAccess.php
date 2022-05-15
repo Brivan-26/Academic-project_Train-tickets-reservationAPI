@@ -2,28 +2,27 @@
 
 namespace App\Http\Middleware;
 
-use App\Providers\RouteServiceProvider;
 use Closure;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Auth;
+use App\Http\Repositories\UserRepository;
 
-class RedirectIfAuthenticated
+class ResetPageAccess
 {
     /**
      * Handle an incoming request.
      *
      * @param  \Illuminate\Http\Request  $request
      * @param  \Closure(\Illuminate\Http\Request): (\Illuminate\Http\Response|\Illuminate\Http\RedirectResponse)  $next
-     * @param  string|null  ...$guards
      * @return \Illuminate\Http\Response|\Illuminate\Http\RedirectResponse
      */
-    public function handle(Request $request, Closure $next, ...$guards)
+    public function handle(Request $request, Closure $next)
     {
-        if (auth('sanctum')->check()) {
+        $userRepository = new UserRepository();
+        if(!$userRepository->PINconfirmation($request)){
             return response()->json([
-                "succes" => false,
-                "message" => "Already authenticated"
-            ],401);
+                "success" => false,
+                "message" => "Wrong PIN"
+            ]);
         }
         return $next($request);
     }

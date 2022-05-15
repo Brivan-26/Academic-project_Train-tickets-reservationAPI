@@ -15,11 +15,10 @@ class Support_ticketResource extends JsonResource
     public function toArray($request)
     {
         // return parent::toArray($request);
-        $user = $this->user();
         return [
             'id' => $this->id,
-            'user_id' => $this->user_id,
-            'assigned_to' => $this->assigned_to,
+            'user' => new UserResource($this->user),
+            'assigned_to' => new UserResource($this->assignedTo),
             'is_active' => $this->is_active,
             'description' => $this->description,
             'title' => $this->title

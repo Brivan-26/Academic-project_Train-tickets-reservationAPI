@@ -68,7 +68,8 @@ class AuthController extends BaseController
         }
     public function logout(){
             /** @var \App\Models\User $user */
-            $user = Auth::user();
+            $id=auth('sanctum')->id();
+            $user = User::find($id);
             $user->tokens()->delete();
         return $this->sendResponse([],'Logged out succesfully');
     }
