@@ -5,15 +5,20 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\Models\User;
 use App\Http\Resources\UserResource;
+use App\Http\Resources\ReviewResource;
+use App\Http\Resources\TravelResource;
 use App\Http\Controllers\BaseController ;
 use App\Http\Repositories\UserRepository;
+use App\Http\Repositories\ReviewRepository;
 use Auth;
 
 class UserController extends BaseController
 {   private $userRepository;
-    public function __construct(UserRepository $userRepository)
+    private $reviewRepository;
+    public function __construct(UserRepository $userRepository, ReviewRepository $reviewRepository)
     {
         $this->userRepository = $userRepository;
+        $this->reviewRepository = $reviewRepository;
     }
 
     public function update_infos(Request $request)
@@ -34,5 +39,21 @@ class UserController extends BaseController
             "Password updated successfully");
         }
         return $this->sendError("Something went wrong",$response['errors']);
+    }
+    
+    public function review_add(Request $request, $id){
+        $response = $this->reviewRepository->add_reviewByRequest($request, $id);
+        if($response['success']){
+            return $this->sendResponse(new ReviewResource($response['data']),
+            "Review added successfully");
+        }
+        return $this->sendError("Something went wrong !",$response['errors']);
+    }
+
+    public function get_personnalTravels()
+    {
+        $response = $this->userRepository->get_travelsHistory();
+        return $this->sendResponse(TravelResource::Collection($response['data']), 
+        "Personnal travels retreived successfully");
     }
 }

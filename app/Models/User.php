@@ -8,7 +8,8 @@ use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 use Laravel\Sanctum\HasApiTokens;
 use Illuminate\Database\Eloquent\SoftDeletes;
-// use Laravel\Cashier\Billable;
+use Illuminate\Database\Eloquent\Builder;
+use Laravel\Cashier\Billable;
 
 class User extends Authenticatable
 {
@@ -77,5 +78,12 @@ class User extends Authenticatable
 
     public function hasAnyRole($roles){
         return $this->role()->whereIn('name', $roles)->first();
+    }
+    public function travels(){
+        $id = $this->id;
+        $travels = Travel::whereHas('tickets', function (Builder $query) use($id) {
+                $query->where('user_id', 'like', $id);
+                })->get();
+        return $travels;
     }
 }
