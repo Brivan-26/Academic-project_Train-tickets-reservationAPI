@@ -16,6 +16,13 @@ class UserController extends BaseController
         $this->userRepository = $userRepository;
     }
 
+    public function get_authUser() {
+        if(auth()->user()) {
+            return $this->sendResponse(new UserResource(auth()->user()), 'Succefully retreived the authenticated user!');
+        }
+        return $this->sendError("Unatuthenticated");
+    }
+
     public function update_infos(Request $request)
     {
         $response = $this->userRepository->update_userInfos($request);
