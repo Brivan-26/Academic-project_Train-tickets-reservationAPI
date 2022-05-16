@@ -164,7 +164,7 @@ class ReservationController extends BaseController
         foreach(Travel::all() as $travel){
             $Travels[] = new TravelResource($travel);
         }
-        return $Travels;
+        return $this->sendResponse($Travels, "Succefully retreived all the travels");
     }
 
     public function NbStations(Travel $travel, Request $request){
