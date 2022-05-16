@@ -4,8 +4,11 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\AdminDashboardController;
+use App\Http\Controllers\PDFController;
 use App\Http\Controllers\SupportDashBoardController;
 use App\Http\Controllers\UserController;
+use App\Http\Controllers\ReservationController;
+use App\Http\Repositories\UserRepository;
 
 
 /*
@@ -67,12 +70,14 @@ Route::prefix('user')->middleware("auth:sanctum")->controller(UserController::cl
 
     Route::post('/update_infos','update_infos');
     Route::post('/update_password','update_password');
+    Route::post('/reset_password', 'reset_password')->middleware('resetAcess');
+    Route::post('/password_pin', [UserRepository::class, 'passwordPIN']);
+
     Route::group(['middleware' => 'can:is_passenger'], function(){
         Route::post('/reviews/create/{id}', 'review_add');
         Route::get('/my_travels', 'get_personnalTravels');
     });
 
-});
 
 Route::prefix('support')->middleware(["auth:sanctum", "can:is_supportORpassenger"])
                         ->controller(SupportDashBoardController::class)->group(function(){
@@ -91,3 +96,11 @@ Route::prefix('support')->middleware(["auth:sanctum", "can:is_supportORpassenger
     
 });
 Route::post('/authUser', [App\Http\Controllers\UserController::class, 'get_authUser']);
+
+});
+
+Route::get('/PDF/{ticketId}', [PDFController::class, 'downloadTicketAsPDF']);
+
+Route::get('/route', [ReservationController::class, 'PassThroughTravels']);
+
+Route::get('/travels', [ReservationController::class, 'AllTravels']);

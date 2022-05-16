@@ -61,7 +61,7 @@ Class ReviewRepository {
         }
         else{
             $response['success'] = true ;
-            $response['data'] = $travel->reviews();
+            $response['data'] = $travel->reviews;
         }
         return $response;
     }

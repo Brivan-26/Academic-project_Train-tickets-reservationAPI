@@ -3,8 +3,10 @@ namespace App\Http\Repositories;
 
 use App\Models\User;
 use Illuminate\Validation\Rule;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Facades\Hash;
+use App\Http\Controllers\NotificationsController as Notif;
 use Illuminate\Http\Request;
 
 Class UserRepository
@@ -137,13 +139,17 @@ Class UserRepository
         return $response;
     }
 
+    public function validationPIN(){
+        Notif::sendPin("Validation PIN", "validation");
+    }
+
     public function validateAccount(Request $request){
         $response=[];
         $givenPin = $request->pin;
         $id = auth('sanctum')->id();
         $user = User::find($id);
-        if($request->cookie('pin')!=null){
-            if($givenPin==$request->cookie('pin')){
+        if($request->cookie('validation')!=null){
+            if($givenPin==$request->cookie('validation')){
                 $user->account_confirmed = 1;
                 $user->save();
                 $response['success'] = true;
@@ -165,6 +171,41 @@ Class UserRepository
             'succes' => true,
             'data' => $user->travels()
         ];
+    }
+    public function passwordPIN(){
+        return Notif::sendPin("PR PIN", "password_pin");
+    }
+
+    public function PINconfirmation(Request $request){
+        $givenPin = $request->password_pin;
+        if($request->cookie('password_pin')!=null){
+            if($request->cookie('password_pin')==$givenPin){
+                return True;
+            } else {
+                return False;
+            }
+        }
+        return False;
+    }
+
+    public function reset_userPassword(Request $request){
+        $id = auth()->user()->id;
+        $validator = Validator::make($request->all(), [
+            'new_password' => 'required|string|min:8',
+            'confirm_new_password' => 'required|string|same:new_password',
+        ]);
+        if($validator->fails()){
+            $response['success'] = false ;
+            $response['errors'] = $validator->errors();
+        }
+        else{
+            $auth = User::find($id);
+            $auth->password = Hash::make($request->new_password);
+            $auth->save();
+            $response['success'] = true;
+            $response['data'] =$auth;
+        }
+        return $response;
     }
 }
 

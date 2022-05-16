@@ -135,14 +135,14 @@ class ReservationController extends BaseController
     */
     public function PassThroughTravels(Request $request){
         $Travels = [];
-        foreach(Travel::where('status','pending') as $travel){
+        foreach(Travel::all()->where('status','pending') as $travel){
             $departure = false;
             $arrival = false;
             foreach($travel->stations as $station){
-                if($station==$request->input('departure_station')){
+                if($station->id == $request->departure_station){
                     $departure = true;
                 }
-                if($station==$request->input('arrival_station') && $departure){
+                if($station->id == $request->arrival_station && $departure){
                     $arrival = true;
                     break;
                 }
@@ -150,6 +150,19 @@ class ReservationController extends BaseController
             if ($arrival){
                 $Travels[] = new TravelResource($travel);
             }
+        }
+        if($Travels){
+            return $this->sendResponse($Travels, "Travels found for this route");
+        } else {
+            return $this->sendError("No travels found for this route");
+        }
+
+    }
+
+    public function AllTravels(){
+        $Travels = [];
+        foreach(Travel::all() as $travel){
+            $Travels[] = new TravelResource($travel);
         }
         return $Travels;
     }
