@@ -17,8 +17,8 @@ class TravelSeeder extends Seeder
     {
         for ($i=1; $i<=5; $i++) {
             DB::table('travels')->insert([
-                'arrival_station' => 'test', 
-                'departure_station' => 'test',
+                'arrival_station' => 1, 
+                'departure_station' => 5,
                 'departure_time' => Carbon::now()->toDateTimeString(),
                 'distance' => 12500,
                 'estimated_duration' => 300,

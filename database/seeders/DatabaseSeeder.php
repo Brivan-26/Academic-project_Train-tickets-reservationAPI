@@ -18,8 +18,8 @@ class DatabaseSeeder extends Seeder
         // \App\Models\User::factory(10)->create();
         $this->call(RoleSeeder::class);
         $this->call(UserSeeder::class);
-        $this->call(TravelSeeder::class);
         $this->call(StationSeeder::class);
+        $this->call(TravelSeeder::class);
         $this->call(Station_photoSeeder::class);
         $this->call(ReviewSeeder::class);
     }

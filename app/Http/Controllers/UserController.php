@@ -6,11 +6,11 @@ use Illuminate\Http\Request;
 use App\Models\User;
 use App\Http\Resources\UserResource;
 use App\Http\Resources\ReviewResource;
-use App\Http\Resources\TravelResource;
+use App\Http\Resources\DetailedTravelResource;
 use App\Http\Controllers\BaseController ;
 use App\Http\Repositories\UserRepository;
 use App\Http\Repositories\ReviewRepository;
-use Auth;
+use Illuminate\Support\Facades\Auth;
 
 class UserController extends BaseController
 {   private $userRepository;
@@ -59,7 +59,7 @@ class UserController extends BaseController
     public function get_personnalTravels()
     {
         $response = $this->userRepository->get_travelsHistory();
-        return $this->sendResponse(TravelResource::Collection($response['data']), 
+        return $this->sendResponse(DetailedTravelResource::Collection($response['data']), 
         "Personnal travels retreived successfully");
     }
     public function reset_password(Request $request){

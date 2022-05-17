@@ -18,6 +18,8 @@ return new class extends Migration
             $table->unsignedBigInteger('station_id');
             $table->unsignedBigInteger('travel_id');
             $table->timestamp('arrival_time');
+            $table->float('firstClass_price');
+            $table->float('secondClass_price');
             $table->integer("passengers_on_board");
             $table->integer("firstClass_passengers_on_board");
             $table->integer("secondClass_passengers_on_board");

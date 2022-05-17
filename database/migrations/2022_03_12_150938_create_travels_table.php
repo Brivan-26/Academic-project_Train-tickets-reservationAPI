@@ -15,14 +15,17 @@ return new class extends Migration
     {
         Schema::create('travels', function (Blueprint $table) {
             $table->bigIncrements('id');
-            $table->string('arrival_station');
-            $table->string('departure_station');
+            $table->foreignId('arrival_station');
+            $table->foreignId('departure_station');
             $table->timestamp('departure_time');
             $table->float('distance');
             $table->float('estimated_duration');
             $table->text('description');
             $table->string('status');
             $table->timestamps();
+
+            $table->foreign('arrival_station')->references('id')->on('stations')->onDelete('cascade');
+            $table->foreign('departure_station')->references('id')->on('stations')->onDelete('cascade');
 
         });
     }

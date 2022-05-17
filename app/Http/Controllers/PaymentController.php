@@ -38,7 +38,7 @@ class PaymentController extends Tool
         if($request->classe == 'F'){
             $charge = \Stripe\Charge::create(
                 [
-                    "amount" => $this->pricing($request->tid, $request)['F'] * $request->nb,
+                    "amount" => $this->pricing($id,$request->landing, $request->boarding)['F'] * $request->nb,
                     "currency" => "dzd",
                     "customer" => $stripeId,
                     "description" => "Payment for First Class"
@@ -47,7 +47,7 @@ class PaymentController extends Tool
         } else if($request->classe == 'S') {
             $charge = \Stripe\Charge::create(
                 [
-                    "amount" => $this->pricing($request->tid, $request)['S'] * $request->nb,
+                    "amount" => $this->pricing($id,$request->landing, $request->boarding)['S'] * $request->nb,
                     "currency" => "dzd",
                     "customer" => $stripeId,
                     "description" => "Payment for Second Class"

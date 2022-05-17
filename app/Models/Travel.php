@@ -31,7 +31,8 @@ class Travel extends Model
     
     public function stations()
     {
-        return $this->belongsToMany(Station::class);
+        return $this->belongsToMany(Station::class)
+                ->withPivot('arrival_time', 'firstClass_price', 'secondClass_price');
     }
 
     public function classe()
