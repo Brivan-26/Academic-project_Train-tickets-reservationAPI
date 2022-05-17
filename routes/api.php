@@ -6,6 +6,7 @@ use App\Http\Controllers\AuthController;
 use App\Http\Controllers\AdminDashboardController;
 use App\Http\Controllers\PDFController;
 use App\Http\Controllers\SupportDashBoardController;
+use App\Http\Controllers\ValidatorDashboardController;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\ReservationController;
 use App\Http\Repositories\UserRepository;
@@ -78,6 +79,15 @@ Route::prefix('user')->middleware("auth:sanctum")->controller(UserController::cl
         Route::post('/reviews/create/{id}', 'review_add');
         Route::get('/my_travels', 'get_personnalTravels');
     });
+
+Route::prefix('validator')->middleware(["auth:sanctum", "can:is_validator"])
+    ->controller(ValidatorDashboardController::class)->group(function(){
+
+        Route::get('/tickets/{id}', 'get_travelTickets');
+        Route::get('/todayTravels', 'get_todayTravels');
+        Route::post('/tickets/validate/{id}', 'validate_ticket');
+
+});
 
 
 Route::prefix('support')->middleware(["auth:sanctum", "can:is_supportORpassenger"])
