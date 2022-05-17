@@ -9,7 +9,8 @@ use App\Http\Controllers\SupportDashBoardController;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\ReservationController;
 use App\Http\Repositories\UserRepository;
-
+use App\Http\Resources\DetailedTravelResource;
+use App\Models\Travel;
 
 /*
 |--------------------------------------------------------------------------
@@ -104,3 +105,7 @@ Route::get('/PDF/{ticketId}', [PDFController::class, 'downloadTicketAsPDF']);
 Route::get('/route', [ReservationController::class, 'PassThroughTravels']);
 
 Route::get('/travels', [ReservationController::class, 'AllTravels']);
+
+Route::get('/test',function(){
+    return DetailedTravelResource::collection(Travel::all());
+});

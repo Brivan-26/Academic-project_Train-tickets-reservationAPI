@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\Models\Travel;
 use App\Http\Resources\TravelResource;
+use App\Http\Resources\DetailedTravelResource;
 use App\Http\Controllers\BaseController as BaseController;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Validator;
@@ -148,7 +149,7 @@ class ReservationController extends BaseController
                 }
             }
             if ($arrival){
-                $Travels[] = new TravelResource($travel);
+                $Travels[] = new DetailedTravelResource($travel);
             }
         }
         if($Travels){
@@ -160,24 +161,23 @@ class ReservationController extends BaseController
     }
 
     public function AllTravels(){
-        $Travels = [];
-        foreach(Travel::all() as $travel){
-            $Travels[] = new TravelResource($travel);
-        }
-        return $this->sendResponse($Travels, "Succefully retreived all the travels");
+        
+        return $this->sendResponse(DetailedTravelResource::collection(Travel::all()), 
+                "All travels retreived successfully");;
     }
 
-    public function NbStations(Travel $travel, Request $request){
+
+    public function NbStations(Travel $travel, $boarding, $landing){
         $i=0;
         $Nb=0;
         foreach($travel->stations as $station){
-            if($station->id==$request->boarding_station){
+            if($station->id==$boarding){
                 $i=1;
             }
             if($i==1){
                 $Nb++;
             }
-            if($station->id==$request->landing_station){
+            if($station->id==$landing){
                 break;
             }
         }
@@ -190,9 +190,9 @@ class ReservationController extends BaseController
      * depending on the overall travel distance. Although some inconsistencies may appear, the
      * logic will remain correct
      */
-    public function pricing($travelId, Request $request){
+    public function pricing($travelId, $boarding, $landing){
         $Travel = Travel::find($travelId);
-        $nbStations = $this->NbStations($Travel, $request);
+        $nbStations = $this->NbStations($Travel, $boarding, $landing);
         $distance = ($Travel->distance) / (count($Travel->stations) - 1);
         $prices = [
             'F' =>  (int)($distance * ($nbStations - 1) * 400),
