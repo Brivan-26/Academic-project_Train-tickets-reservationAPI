@@ -8,7 +8,7 @@ use App\Http\Resources\TravelResource;
 use App\Http\Controllers\BaseController as BaseController;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Validator;
-
+use App\Models\Station;
 class ReservationController extends BaseController
 {
     /**
@@ -134,15 +134,20 @@ class ReservationController extends BaseController
     *
     */
     public function PassThroughTravels(Request $request){
+        $depStation = Station::where('name', $request->depStation)->first();
+        $arvStation = Station::where('name', $request->arvStation)->first();
         $Travels = [];
         foreach(Travel::all()->where('status','pending') as $travel){
+            if(date("Y-m-d", strtotime($travel->departure_time)) != $request->depTime){
+                return $this->sendError("No travels found for this date");
+            }
             $departure = false;
             $arrival = false;
             foreach($travel->stations as $station){
-                if($station->id == $request->departure_station){
+                if($station->id == $depStation->id){
                     $departure = true;
                 }
-                if($station->id == $request->arrival_station && $departure){
+                if($station->id == $arvStation->id && $departure){
                     $arrival = true;
                     break;
                 }
@@ -160,11 +165,12 @@ class ReservationController extends BaseController
     }
 
     public function AllTravels(){
-        $Travels = [];
-        foreach(Travel::all() as $travel){
-            $Travels[] = new TravelResource($travel);
-        }
-        return $this->sendResponse($Travels, "Succefully retreived all the travels");
+        $travels = Travel::all();
+        // $Travels = [];
+        // foreach(Travel::all() as $travel){
+        //     $Travels[] = new TravelResource($travel);
+        // }
+        return $this->sendResponse(TravelResource::collection($travels), "Succefully retreived all the travels");
     }
 
     public function NbStations(Travel $travel, Request $request){
