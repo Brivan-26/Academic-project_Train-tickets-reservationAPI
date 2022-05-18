@@ -21,6 +21,8 @@ class TravelStationSeeder extends Seeder
                 'travel_id' => 1,
                 'station_id' => $i,
                 'passengers_on_board' => 0,
+                'firstClass_price' => 500,
+                'secondClass_price' => 250,
                 'firstClass_passengers_on_board' => 0,
                 'secondClass_passengers_on_board' => 0,
                 'arrival_time' => Carbon::now()->toDateTimeString(),
