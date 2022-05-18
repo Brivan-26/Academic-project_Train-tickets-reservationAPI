@@ -96,13 +96,13 @@ Route::prefix('support')->middleware(["auth:sanctum", "can:is_supportORpassenger
     Route::post('/support_tickets/create','supportTicket_create')->middleware('can:is_passenger');
     
 });
-Route::post('/authUser', [App\Http\Controllers\UserController::class, 'get_authUser']);
 
 });
+Route::get('/authUser', [App\Http\Controllers\UserController::class, 'get_authUser']);
 
 Route::get('/PDF/{ticketId}', [PDFController::class, 'downloadTicketAsPDF']);
 
-Route::get('/route', [ReservationController::class, 'PassThroughTravels']);
+Route::post('/route', [ReservationController::class, 'PassThroughTravels']);
 
 Route::get('/travels', [ReservationController::class, 'AllTravels']);
 

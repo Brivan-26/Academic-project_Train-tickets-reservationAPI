@@ -18,6 +18,7 @@ class TravelResource extends JsonResource
             'id' => $this->id,
             'departure_station' => $this->departure_station,
             'arrival_station' => $this->arrival_station,
+            'departure_time' => $this->departure_time,
             'distance' => $this->distance,
             'estimated_duration' => $this->estimated_duration,
             'description' => $this->description,
