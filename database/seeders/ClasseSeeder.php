@@ -5,7 +5,7 @@ namespace Database\Seeders;
 use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
 use Illuminate\Support\Facades\DB;
-
+use App\Models\Travel;
 class ClasseSeeder extends Seeder
 {
     /**
@@ -15,12 +15,13 @@ class ClasseSeeder extends Seeder
      */
     public function run()
     {
-        DB::table('classes')->insert([
-                'travel_id' => 1,
-                'firstClass_limitPlaces' => 300,
-                'secondClass_limitPlaces' => 400,
-                'firstClass_vacancies' => 100,
-                'secondClass_vacancies' => 100
-        ]);
+        foreach(Travel::all() as $travel) {
+
+            DB::table('classes')->insert([
+                    'travel_id' => $travel->id,
+                    'firstClass_limitPlaces' => 300,
+                    'secondClass_limitPlaces' => 400,
+            ]);
+        }
     }
 }
