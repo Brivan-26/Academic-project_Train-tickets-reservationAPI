@@ -37,12 +37,12 @@ class Ticket extends Model
         return $this->belongsTo(Travel::class);
     }
 
-    public function boardingStation()
+    public function boardStation()
     {
         return $this->belongsTo(Station::class, 'boarding_station');
     }
 
-    public function landingStation()
+    public function landStation()
     {
         return $this->belongsTo(Station::class, 'landing_station');
     }

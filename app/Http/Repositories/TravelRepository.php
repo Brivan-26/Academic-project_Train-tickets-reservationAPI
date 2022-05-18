@@ -6,6 +6,7 @@ use App\Models\Travel;
 use App\Http\Controllers\NotificationsController as Notif;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Http\Request;
+use Carbon\Carbon;
 
 Class TravelRepository
 {
@@ -119,4 +120,11 @@ Class TravelRepository
 
     }
 
+
+    public function travelsOfTheDay(){
+        return [
+            'data' => Travel::whereDate('departure_time', Carbon::today())->get(),
+            'success' => true 
+        ];
+    }
 }

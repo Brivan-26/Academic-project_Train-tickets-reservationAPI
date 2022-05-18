@@ -20,7 +20,6 @@ class StationResource extends JsonResource
             'id' => $this->id,
             'name' => $this->name,
             'wilaya' => $this->wilaya,
-            'photos' => Station_photoResource::collection($this->photos)
         ];
     }
 }

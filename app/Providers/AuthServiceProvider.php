@@ -40,6 +40,10 @@ class AuthServiceProvider extends ServiceProvider
             return $user->is_passenger();
         });
 
+        Gate::define('is_validator', function (User $user) {
+            return $user->is_validator();
+        });
+
         Gate::define('is_supportORpassenger', function(User $user){
             return $user->hasAnyRole(["support","passenger"]);
         });

@@ -76,6 +76,10 @@ class User extends Authenticatable
         return ($this->role->name=="passenger");
     }
 
+    public function is_validator(){
+        return ($this->role->name=="validator");
+    }
+
     public function hasAnyRole($roles){
         return $this->role()->whereIn('name', $roles)->first();
     }
