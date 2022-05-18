@@ -79,15 +79,8 @@ Route::prefix('user')->middleware("auth:sanctum")->controller(UserController::cl
         Route::post('/reviews/create/{id}', 'review_add');
         Route::get('/my_travels', 'get_personnalTravels');
     });
-
-Route::prefix('validator')->middleware(["auth:sanctum", "can:is_validator"])
-    ->controller(ValidatorDashboardController::class)->group(function(){
-
-        Route::get('/tickets/{id}', 'get_travelTickets');
-        Route::get('/todayTravels', 'get_todayTravels');
-        Route::post('/tickets/validate/{id}', 'validate_ticket');
-
 });
+
 
 
 Route::prefix('support')->middleware(["auth:sanctum", "can:is_supportORpassenger"])
@@ -108,7 +101,15 @@ Route::prefix('support')->middleware(["auth:sanctum", "can:is_supportORpassenger
 });
 Route::post('/authUser', [App\Http\Controllers\UserController::class, 'get_authUser']);
 
+Route::prefix('validator')->middleware(["auth:sanctum", "can:is_validator"])
+    ->controller(ValidatorDashboardController::class)->group(function(){
+
+        Route::get('/tickets/{id}', 'get_travelTickets');
+        Route::get('/todayTravels', 'get_todayTravels');
+        Route::post('/tickets/validate/{id}', 'validate_ticket');
+
 });
+
 
 Route::get('/PDF/{ticketId}', [PDFController::class, 'downloadTicketAsPDF']);
 

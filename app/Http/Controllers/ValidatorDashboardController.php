@@ -6,7 +6,7 @@ use Illuminate\Http\Request;
 use App\Http\Repositories\TicketRepository;
 use App\Http\Repositories\TravelRepository;
 use App\Http\Resources\TicketResource;
-use App\Http\Resources\TravelResource;
+use App\Http\Resources\DetailedTravelResource;
 
 class ValidatorDashboardController extends BaseController
 {
@@ -44,7 +44,7 @@ class ValidatorDashboardController extends BaseController
     public function get_todayTravels(){
         $response = $this->travelRepository->travelsOfTheDay();
         if($response['success']){
-            return $this->sendResponse(TravelResource::collection($response['data']),
+            return $this->sendResponse(DetailedTravelResource::collection($response['data']),
                                         "Travels retreived successfully");
         }
         else{

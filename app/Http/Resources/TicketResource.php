@@ -19,18 +19,18 @@ class TicketResource extends JsonResource
         // return parent::toArray($request);
         return [
             'id' => $this->id,
-            'payer' =>  new UserResource($this->user),
-            'travel' => new TravelResource($this->travel),
+            //'payer' =>  $this->user->first_name." ".$this->user->last_name,
+            'travel_id' => $this->travel_id,
             'passenger_name' => $this->passenger_name,
             'travel_class' => $this->travel_class,
             'payment_method' => $this->payment_method,
-            'payment_token' => $this->payment_token,
+            //'payment_token' => $this->payment_token,
             'validated' => $this->validated,
-            'boarding_station' => new StationResource($this->boardingStation),
-            'landing_station' => new StationResource($this->landingStation),
+            'boarding_station' => new StationResource($this->boardStation),
+            'landing_station' => new StationResource($this->landStation),
             'price' => $this->price,
-            'created_at' => $this->created_at->diffForHumans(),
-            'updated_at' => $this->updated_at ? $this->updated_at->diffForHumans(): $this->updated_at
+            //'created_at' => $this->created_at->diffForHumans(),
+            //'updated_at' => $this->updated_at ? $this->updated_at->diffForHumans(): $this->updated_at
         ];
     }
 }
