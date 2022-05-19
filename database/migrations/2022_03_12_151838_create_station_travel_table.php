@@ -20,9 +20,9 @@ return new class extends Migration
             $table->timestamp('arrival_time');
             $table->float('firstClass_price');
             $table->float('secondClass_price');
-            $table->integer("passengers_on_board");
-            $table->integer("firstClass_passengers_on_board");
-            $table->integer("secondClass_passengers_on_board");
+            $table->integer("passengers_on_board")->default(0);
+            $table->integer("firstClass_passengers_on_board")->default(0);
+            $table->integer("secondClass_passengers_on_board")->default(0);
             $table->timestamps();
             $table->foreign('station_id')->references('id')->on('stations')->onDelete('cascade');
             $table->foreign('travel_id')->references('id')->on('travels')->onDelete('cascade');

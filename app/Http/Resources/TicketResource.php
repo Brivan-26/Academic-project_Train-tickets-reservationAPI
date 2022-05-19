@@ -3,8 +3,7 @@
 namespace App\Http\Resources;
 
 use Illuminate\Http\Resources\Json\JsonResource;
-use App\Http\Resources\UserResource as UserResource;
-use App\Http\Resources\TravelResource as TravelResource;
+
 use App\Http\Resources\StationResource as StationResource;
 class TicketResource extends JsonResource
 {

@@ -1,6 +1,5 @@
 <?php
 
-use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\AdminDashboardController;
@@ -10,8 +9,6 @@ use App\Http\Controllers\ValidatorDashboardController;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\ReservationController;
 use App\Http\Repositories\UserRepository;
-use App\Http\Resources\DetailedTravelResource;
-use App\Models\Travel;
 
 /*
 |--------------------------------------------------------------------------
@@ -118,5 +115,5 @@ Route::post('/route', [ReservationController::class, 'PassThroughTravels']);
 Route::get('/travels', [ReservationController::class, 'AllTravels']);
 
 Route::get('/test',function(){
-    return DetailedTravelResource::collection(Travel::all());
+    return;
 });

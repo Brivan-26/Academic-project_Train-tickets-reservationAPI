@@ -1,7 +1,6 @@
 <?php
 namespace App\Http\Repositories;
 
-use App\Models\User;
 use App\Models\Support_ticket;
 use App\Models\Support_tickets_answer;
 
