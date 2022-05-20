@@ -1,5 +1,6 @@
 <?php
 namespace App\Http\Repositories;
+
 use App\Models\Ticket;
 use App\Models\Travel;
 

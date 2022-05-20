@@ -2,7 +2,6 @@
 
 namespace App\Http\Resources;
 
-use Egulias\EmailValidator\Result\Reason\DetailedReason;
 use Illuminate\Http\Resources\Json\JsonResource;
 
 class DetailedTravelResource extends JsonResource
@@ -18,11 +17,8 @@ class DetailedTravelResource extends JsonResource
         //return parent::toArray($request);
         return [
             'id' => $this->id,
-            //'departure_station' => $this->departure_station,
-            //'arrival_station' => $this->arrival_station,
             'distance' => $this->distance,
             'estimated_duration' => $this->estimated_duration,
-            //'description' => $this->description,
             'status' => $this->status,
             'stations' => DetailedStationResource::collection($this->stations),
             'firstClass_limitPlaces' => $this->classe->firstClass_limitPlaces,

@@ -2,10 +2,6 @@
 
 namespace App\Http\Controllers;
 
-use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Cookie;
-
-
 class NotificationsController extends Controller
 {
     public static function sendMessage($text, $answer){

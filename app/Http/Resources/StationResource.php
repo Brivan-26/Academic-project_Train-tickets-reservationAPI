@@ -3,7 +3,6 @@
 namespace App\Http\Resources;
 
 use Illuminate\Http\Resources\Json\JsonResource;
-use App\Http\Resources\Station_photoResource as Station_photoResource;
 
 class StationResource extends JsonResource
 {

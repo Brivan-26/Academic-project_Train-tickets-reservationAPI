@@ -4,7 +4,6 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Models\Travel;
-use App\Http\Resources\TravelResource;
 use App\Http\Resources\DetailedTravelResource;
 use App\Http\Controllers\BaseController as BaseController;
 use Illuminate\Support\Facades\DB;

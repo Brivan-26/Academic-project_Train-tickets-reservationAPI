@@ -7,6 +7,7 @@ use App\Http\Controllers\NotificationsController as Notif;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Http\Request;
 use Carbon\Carbon;
+use App\Jobs\RenderTravelCompleted;
 
 Class TravelRepository
 {
@@ -19,13 +20,16 @@ Class TravelRepository
     public function createByRequest($request)
     {
         $response = [];
-        $validator = Validator::make($request->all(), [
-            'departure_station' => 'required|string',
+            $validator = Validator::make($request->all(), [
+            'departure_station' => 'required',
             'departure_time' => 'required',
             'arrival_station' => 'required',
             'distance' => 'required',
             'estimated_duration' => 'required',
             'description' => 'required',
+            "firstClass_limitPlaces" => 'required',
+            "secondClass_limitPlaces" => 'required',
+            'stations' => 'required'
         ]);
 
         if($validator->fails()){
@@ -43,6 +47,26 @@ Class TravelRepository
             'description' => $request->description,
             "status" => "pending"
         ]);
+        $travel->refresh();
+
+        $travel->classe()->create([
+            "firstClass_limitPlaces" => $request->firstClass_limitPlaces,
+            "secondClass_limitPlaces" => $request->secondClass_limitPlaces,
+        ]);
+
+        foreach($request->stations as $station){
+            $travel->stations()->attach($station["id"], [
+                'arrival_time' => $station["arrival_time"],
+                'firstClass_price' => $station["firstClass_price"],
+                'secondClass_price' => $station["secondClass_price"],
+            ]);
+        }
+
+        $arriv = new Carbon($request->stations[count($request->stations)-1]["arrival_time"]);
+        $travel->refresh();
+        RenderTravelCompleted::dispatch($travel)
+                    ->delay((new Carbon($arriv))
+                            ->addHours(-2));
 
         $response["success"] = true;
         $response["data"] = $travel;

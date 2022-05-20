@@ -3,7 +3,6 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
-use App\Models\User;
 use App\Http\Resources\UserResource as UserResource;
 use App\Http\Resources\ReviewResource as ReviewResource;
 use App\Http\Resources\TravelResource as TravelResource;

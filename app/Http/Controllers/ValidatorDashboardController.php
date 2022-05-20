@@ -2,7 +2,6 @@
 
 namespace App\Http\Controllers;
 
-use Illuminate\Http\Request;
 use App\Http\Repositories\TicketRepository;
 use App\Http\Repositories\TravelRepository;
 use App\Http\Resources\TicketResource;

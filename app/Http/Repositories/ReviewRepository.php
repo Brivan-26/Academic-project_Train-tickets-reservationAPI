@@ -1,8 +1,7 @@
 <?php
 namespace App\Http\Repositories;
-use App\Models\Ticket;
+
 use App\Models\Travel;
-use App\Models\User;
 use App\Models\Review;
 
 Class ReviewRepository {
