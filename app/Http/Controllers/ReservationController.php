@@ -96,10 +96,7 @@ class ReservationController extends BaseController
                     }
                 }
             }
-            return $this->sendResponse([
-                                        "Available" => True,
-                                        "Seats" => $Seats
-                                    ], "There are {$Seats} Places Available");
+            return $this->sendResponse($Seats, "There are {$Seats} Places Available");
         }
         else if ($request->classe=="S"){
             foreach($travel->stations as $station){
@@ -124,10 +121,7 @@ class ReservationController extends BaseController
                     }
                 }
             }
-            return $this->sendResponse([
-                                        "Available" => True,
-                                        "Seats" => $Seats
-                                    ], "There are {$Seats} Places Available");
+            return $this->sendResponse($Seats, "There are {$Seats} Places Available");
         }
     }
     /**

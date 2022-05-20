@@ -83,7 +83,7 @@ Route::prefix('user')->middleware("auth:sanctum")->controller(UserController::cl
 
 
 
-Route::prefix('support')->middleware(["auth:sanctum", "can:is_supportORpassenger"])
+Route::prefix('support')->middleware(["auth:sdownloadTicketAsPDFanctum", "can:is_supportORpassenger"])
                         ->controller(SupportDashBoardController::class)->group(function(){
 
         Route::get('/my_supportTickets','supportTickets_get');
@@ -114,6 +114,7 @@ Route::get('/authUser', [App\Http\Controllers\UserController::class, 'get_authUs
 Route::get('/PDF/{ticketId}', [PDFController::class, 'downloadTicketAsPDF']);
 
 Route::post('/route', [ReservationController::class, 'PassThroughTravels']);
+Route::post('/checkAvailability', [ReservationController::class, 'AvAndP']);
 
 Route::get('/travels', [ReservationController::class, 'AllTravels']);
 
