@@ -19,7 +19,8 @@ class Ticket extends Model
         'validated',
         'boarding_station',
         'landing_station',
-        'price'
+        'price',
+        'qrcode_token'
     ];
 
     public function user()

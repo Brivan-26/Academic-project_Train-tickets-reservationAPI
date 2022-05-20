@@ -8,6 +8,7 @@ use App\Http\Controllers\PDFController;
 use App\Http\Controllers\SupportDashBoardController;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\ReservationController;
+use App\Http\Repositories\TicketRepository;
 use App\Http\Repositories\UserRepository;
 
 
@@ -93,13 +94,21 @@ Route::prefix('support')->middleware(["auth:sanctum", "can:is_supportORpassenger
     });
 
     Route::post('/support_tickets/create','supportTicket_create')->middleware('can:is_passenger');
-    
+
 });
 Route::post('/authUser', [App\Http\Controllers\UserController::class, 'get_authUser']);
 
 });
 
-Route::get('/PDF/{ticketId}', [PDFController::class, 'downloadTicketAsPDF']);
+Route::post('/validator/login', [AuthController::class, 'validatorLogin']);
+Route::prefix('validator')->middleware(["auth:sanctum", "can:is_validator"])
+                          ->group(function(){
+    Route::post('/validate_ticket', [TicketRepository::class, 'validateTicket']);
+
+});
+
+
+Route::get('/PDF', [PDFController::class, 'downloadTicketAsPDF']);
 
 Route::get('/route', [ReservationController::class, 'PassThroughTravels']);
 

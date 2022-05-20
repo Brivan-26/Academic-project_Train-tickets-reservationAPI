@@ -13,8 +13,7 @@ use Laravel\Cashier\Billable;
 
 class User extends Authenticatable
 {
-    // use HasApiTokens, HasFactory, Notifiable, SoftDeletes, Billable;
-    use HasApiTokens, HasFactory, Notifiable, SoftDeletes;
+    use HasApiTokens, HasFactory, Notifiable, SoftDeletes, Billable;
 
     /**
      * The attributes that are mass assignable.
@@ -52,7 +51,7 @@ class User extends Authenticatable
     public function reviews(){
         return $this->hasMany(Review::class, 'user_id');
     }
-    
+
     public function support_tickets()
     {
         if ($this->is_passenger()){
@@ -74,6 +73,10 @@ class User extends Authenticatable
 
     public function is_passenger(){
         return ($this->role->name=="passenger");
+    }
+
+    public function is_validator(){
+        return ($this->role->name=="validator");
     }
 
     public function hasAnyRole($roles){

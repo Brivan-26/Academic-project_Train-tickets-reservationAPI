@@ -8,13 +8,17 @@ use App\Models\Ticket;
 
 class PDFController extends Controller
 {
-    public function downloadTicketAsPDF($ticketId){
-        $tickets = Ticket::all()->where('id','>', $ticketId);
+    public function downloadTicketAsPDF(){
+        $tickets = Ticket::all();
         $data = [
             'tickets' => $tickets
         ];
-
         $pdf = PDF::loadView('pdf', $data);
-        return $pdf->download('Ticket.pdf');
+        if(count($tickets)>1){
+            return $pdf->download('Tickets', '.pdf');
+        } else {
+            return $pdf->download('Ticket', '.pdf');
+        }
+
     }
 }

@@ -10,7 +10,7 @@ use App\Http\Resources\TravelResource;
 use App\Http\Controllers\BaseController ;
 use App\Http\Repositories\UserRepository;
 use App\Http\Repositories\ReviewRepository;
-use Auth;
+use Illuminate\Support\Facades\Auth;
 
 class UserController extends BaseController
 {   private $userRepository;
@@ -46,7 +46,7 @@ class UserController extends BaseController
         }
         return $this->sendError("Something went wrong",$response['errors']);
     }
-    
+
     public function review_add(Request $request, $id){
         $response = $this->reviewRepository->add_reviewByRequest($request, $id);
         if($response['success']){
@@ -59,7 +59,7 @@ class UserController extends BaseController
     public function get_personnalTravels()
     {
         $response = $this->userRepository->get_travelsHistory();
-        return $this->sendResponse(TravelResource::Collection($response['data']), 
+        return $this->sendResponse(TravelResource::Collection($response['data']),
         "Personnal travels retreived successfully");
     }
     public function reset_password(Request $request){
