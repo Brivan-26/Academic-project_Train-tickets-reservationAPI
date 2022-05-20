@@ -14,7 +14,10 @@ use Laravel\Cashier\Billable;
 class User extends Authenticatable
 {
     use HasApiTokens, HasFactory, Notifiable, SoftDeletes, Billable;
+<<<<<<< HEAD
     //use HasApiTokens, HasFactory, Notifiable, SoftDeletes;
+=======
+>>>>>>> oussama.pdfGenerationV2
 
     /**
      * The attributes that are mass assignable.
@@ -52,7 +55,7 @@ class User extends Authenticatable
     public function reviews(){
         return $this->hasMany(Review::class, 'user_id');
     }
-    
+
     public function support_tickets()
     {
         if ($this->is_passenger()){

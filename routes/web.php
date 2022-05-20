@@ -3,6 +3,7 @@
 
 use App\Http\Controllers\PaymentController;
 use App\Http\Controllers\PDFController;
+use App\Http\Controllers\QrCodeController;
 use App\Http\Controllers\ReservationController;
 use Illuminate\Support\Facades\Route;
 /*

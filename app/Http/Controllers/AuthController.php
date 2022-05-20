@@ -42,13 +42,6 @@ class AuthController extends BaseController
     }
 
     public function login(Request $request){
-            /*$validator = Validator::make($request->all(), [
-                'phone_number' => 'required',
-                'password' => 'required',
-            ]);
-            if($validator->fails()){
-                return $this->sendError("Validation of data failed",$validator->errors());
-            }*/
             $validator = $request->validate([
                 "phone_number" => 'required',
                 "password" => 'required'
@@ -72,5 +65,24 @@ class AuthController extends BaseController
             $user = User::find($id);
             $user->tokens()->delete();
         return $this->sendResponse([],'Logged out succesfully');
+    }
+
+    public function validatorLogin(Request $request){
+        $validator = $request->validate([
+            "phone_number" => 'required',
+            "password" => 'required'
+        ]);
+        $user = User::where('phone_number',$request->phone_number)->first();
+        if(Auth::attempt($validator) && $user->is_validator()){
+            $token = $user->createToken('myapptoken')->plainTextToken;
+            $result = [
+                'user' => new UserResource($user),
+                'token' => $token
+            ];
+            return $this->sendResponse($result,'Login succesfull');
+        }
+        else{
+            return $this->sendError("No validator found with the specified data");
+        }
     }
 }

@@ -13,6 +13,7 @@
         "laravel/sanctum": "^2.15",
         "laravel/tinker": "^2.7",
         "laravel/vonage-notification-channel": "^3.0",
+        "milon/barcode": "^9.0",
         "stripe/stripe-php": "^7.128",
         "vonage/client": "^3.0"
     },

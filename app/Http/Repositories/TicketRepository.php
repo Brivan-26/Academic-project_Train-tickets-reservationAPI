@@ -3,8 +3,9 @@ namespace App\Http\Repositories;
 
 use App\Models\Ticket;
 use App\Models\Travel;
+use Illuminate\Http\Request;
 
-Class TicketRepository {
+class TicketRepository {
     public function all()
     {
         return Ticket::all();
@@ -15,7 +16,7 @@ Class TicketRepository {
         $tickets = Ticket::whereHas('travel', function($q){
             $q->where('status', '!=', 'completed');
          })->get();
-        
+
          return $tickets;
     }
 
@@ -48,24 +49,21 @@ Class TicketRepository {
         return $response;
     }
 
-    public function validateById($id){
+    public function validateTicket(Request $request){
         $response = [];
-        $ticket = Ticket::find($id);
-        if(!$ticket) {
-            $response["success"] = false;
-            $response["errors"] = 'No ticket found with specified id';
-        }
-        else{
-            if($ticket->validated){
-                $response["success"] = false;
-                $response["errors"] = 'Ticket already validated';            
-            }
-            else{
-                $ticket->validated = true;
-                $ticket->save();
-                $response["success"] = true;
-                $response["data"] = $ticket;
-            }
+        $tickets = Travel::find($request->travelId)->tickets;
+        $ticket = $tickets->where("qrcode_token", $request->qrcode_token)->first();
+        if($ticket==null){
+            $response['success'] = false;
+            $response['errors'] = "No such ticket";
+        } else if($ticket && ($ticket->validated==false)){
+            $ticket->validated = 1;
+            $ticket->save();
+            $response['success'] = true;
+            $response['data'] = $ticket;
+        } else if($ticket->validated==true) {
+            $response['success'] = false;
+            $response['errors'] = "Ticket already validated";
         }
         return $response;
     }

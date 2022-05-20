@@ -5,6 +5,11 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\Models\User;
 use App\Models\Ticket;
+<<<<<<< HEAD
+=======
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Str;
+>>>>>>> oussama.pdfGenerationV2
 use App\Http\Controllers\ReservationController as Tool;
 
 class PaymentController extends Tool
@@ -37,7 +42,11 @@ class PaymentController extends Tool
         if($request->classe == 'F'){
             $charge = \Stripe\Charge::create(
                 [
+<<<<<<< HEAD
                     "amount" => $this->pricing($id,$request->landing, $request->boarding)['F'] * $request->nb,
+=======
+                    "amount" => $this->pricing($request->tid, $request)['F'] * count($request->passengers),
+>>>>>>> oussama.pdfGenerationV2
                     "currency" => "dzd",
                     "customer" => $stripeId,
                     "description" => "Payment for First Class"
@@ -46,7 +55,11 @@ class PaymentController extends Tool
         } else if($request->classe == 'S') {
             $charge = \Stripe\Charge::create(
                 [
+<<<<<<< HEAD
                     "amount" => $this->pricing($id,$request->landing, $request->boarding)['S'] * $request->nb,
+=======
+                    "amount" => $this->pricing($request->tid, $request)['S'] * count($request->passengers),
+>>>>>>> oussama.pdfGenerationV2
                     "currency" => "dzd",
                     "customer" => $stripeId,
                     "description" => "Payment for Second Class"
@@ -54,19 +67,21 @@ class PaymentController extends Tool
             );
         }
 
-
-        Ticket::create([
-            'user_id' => $user->id,
-            'travel_id' => $request->tid,
-            'passenger_name' => $request->name,
-            'travel_class' => $request->classe,
-            'payment_method' => 'card',
-            'payment_token' => $charge['id'],
-            'validated' => false,
-            'boarding_station' => $request->boarding_station,
-            'landing_station' => $request->landing_station,
-            'price' => $charge['amount'] / 100
-        ]);
+        foreach($request->passengers as $passenger){
+            Ticket::create([
+                'user_id' => $user->id,
+                'travel_id' => $request->tid,
+                'passenger_name' => $passenger->name,
+                'travel_class' => $request->classe,
+                'payment_method' => 'card',
+                'payment_token' => $charge['id'],
+                'validated' => false,
+                'boarding_station' => $request->boarding_station,
+                'landing_station' => $request->landing_station,
+                'price' => $charge['amount'] / 100,
+                'qrcode_token' => Str::random(64)
+            ]);
+        }
 
         $this->PassNumberInc($request->tid, $request);
 

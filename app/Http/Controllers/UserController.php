@@ -45,7 +45,7 @@ class UserController extends BaseController
         }
         return $this->sendError("Something went wrong",$response['errors']);
     }
-    
+
     public function review_add(Request $request, $id){
         $response = $this->reviewRepository->add_reviewByRequest($request, $id);
         if($response['success']){
@@ -58,7 +58,11 @@ class UserController extends BaseController
     public function get_personnalTravels()
     {
         $response = $this->userRepository->get_travelsHistory();
+<<<<<<< HEAD
         return $this->sendResponse(DetailedTravelResource::Collection($response['data']), 
+=======
+        return $this->sendResponse(TravelResource::Collection($response['data']),
+>>>>>>> oussama.pdfGenerationV2
         "Personnal travels retreived successfully");
     }
     public function reset_password(Request $request){

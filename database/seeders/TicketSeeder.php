@@ -28,13 +28,14 @@ class TicketSeeder extends Seeder
                 'user_id' => $randomUser->id,
                 'travel_id' => $randomTravel->id,
                 'passenger_name' => 'passenger',
-                'travel_class' => 'A',
-                'payment_method' => 'stripe',
+                'travel_class' => 'F',
+                'payment_method' => 'card',
                 'payment_token' => Str::random(11),
                 'validated' => 0,
                 'boarding_station' => $randomStation1->id,
                 'landing_station' => $randomStation2->id,
-                'price' => 1000
+                'price' => 1000,
+                'qrcode_token' => Str::random(40)
             ]);
         }
     }
