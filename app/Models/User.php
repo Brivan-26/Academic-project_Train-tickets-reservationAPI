@@ -14,10 +14,7 @@ use Laravel\Cashier\Billable;
 class User extends Authenticatable
 {
     use HasApiTokens, HasFactory, Notifiable, SoftDeletes, Billable;
-<<<<<<< HEAD
     //use HasApiTokens, HasFactory, Notifiable, SoftDeletes;
-=======
->>>>>>> oussama.pdfGenerationV2
 
     /**
      * The attributes that are mass assignable.
@@ -31,6 +28,7 @@ class User extends Authenticatable
         'password',
         'account_confirmed',
         'role_id',
+        'profile_img',
     ];
 
     /**

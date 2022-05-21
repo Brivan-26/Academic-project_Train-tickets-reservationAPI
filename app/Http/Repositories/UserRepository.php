@@ -7,6 +7,7 @@ use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Facades\Hash;
 use App\Http\Controllers\NotificationsController as Notif;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Storage; 
 
 Class UserRepository
 {
@@ -29,6 +30,7 @@ Class UserRepository
             ],
             'first_name' => ['required','string','min:4','max:10'],
             'last_name' => ['required','string','min:4','max:10'],
+            'image' => 'required|image:jpeg,png,jpg,gif,svg'
         ]);
         if($validator->fails()){
             $response['success'] = false ;
@@ -39,6 +41,13 @@ Class UserRepository
             $auth->phone_number = $request->phone_number;
             $auth->first_name = $request->first_name;
             $auth->last_name = $request->last_name;
+
+            if($auth->profile_img){
+                Storage::disk('public')->delete($auth->profile_img);
+            };
+            $path = Storage::disk('public')->put('users/avatars', $request->file('image'));
+            $auth->profile_img = $path;
+            
             $auth->save();
             $response['success'] = true ;
             $response['data'] = $auth;
