@@ -10,6 +10,8 @@ use App\Http\Controllers\UserController;
 use App\Http\Controllers\ReservationController;
 use App\Http\Repositories\TicketRepository;
 use App\Http\Repositories\UserRepository;
+use Illuminate\Support\Facades\File; 
+use Illuminate\Support\Facades\Storage;
 
 /*
 |--------------------------------------------------------------------------
@@ -125,5 +127,6 @@ Route::post('/checkAvailability', [ReservationController::class, 'AvAndP']);
 Route::get('/travels', [ReservationController::class, 'AllTravels']);
 
 Route::get('/test',function(){
+
     return;
 });

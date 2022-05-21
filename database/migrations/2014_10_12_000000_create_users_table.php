@@ -21,6 +21,7 @@ return new class extends Migration
             $table->string('password');
             $table->foreignId('role_id')->constrained()->onDelete('cascade');
             $table->boolean('account_confirmed');
+            $table->string('profile_img')->nullable();
             $table->softDeletes();
             $table->rememberToken();
             $table->timestamps();

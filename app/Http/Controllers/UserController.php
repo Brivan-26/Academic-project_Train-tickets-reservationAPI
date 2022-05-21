@@ -58,7 +58,7 @@ class UserController extends BaseController
     public function get_personnalTravels()
     {
         $response = $this->userRepository->get_travelsHistory();
-        return $this->sendResponse(TravelResource::Collection($response['data']),
+        return $this->sendResponse(DetailedTravelResource::Collection($response['data']), 
         "Personnal travels retreived successfully");
     }
     public function reset_password(Request $request){

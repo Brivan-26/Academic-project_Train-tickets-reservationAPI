@@ -24,7 +24,8 @@ class UserResource extends JsonResource
             'acount_confirmed' => $this->acount_confirmed,
             'created_at' => $this->created_at,
             'updated_at' => $this->updated_at,
-            'role' => $this->role->name
+            'role' => $this->role->name,
+            'profile_img' => '/'.$this->profile_img, 
         ];
     }
 }
