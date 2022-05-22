@@ -29,7 +29,7 @@ class ReservationRepository
             if($i){
                 $value = DB::table('station_travel')->where('travel_id', $travelId)
                                                     ->where('station_id', $station->id)->value('passengers_on_board');
-                $value+=$request->nb;
+                $value+=count($request->passengers);
                 DB::table('station_travel')->where('travel_id', $travelId)
                                            ->where('station_id', $station->id)->update([
                     'passengers_on_board' => $value
@@ -37,7 +37,7 @@ class ReservationRepository
                 if($request->classe=='F'){
                     $value = DB::table('station_travel')->where('travel_id', $travelId)
                                                         ->where('station_id', $station->id)->value('firstClass_passengers_on_board');
-                    $value+=$request->nb;
+                    $value+=count($request->passengers);
                     DB::table('station_travel')->where('travel_id', $travelId)
                                                ->where('station_id', $station->id)->update([
                         'firstClass_passengers_on_board' => $value
@@ -46,7 +46,7 @@ class ReservationRepository
                 else if($request->classe=='S'){
                     $value = DB::table('station_travel')->where('travel_id', $travelId)
                                                         ->where('station_id', $station->id)->value('secondClass_passengers_on_board');
-                    $value+=$request->nb;
+                    $value+=count($request->passengers);
                     DB::table('station_travel')->where('travel_id', $travelId)
                                                ->where('station_id', $station->id)->update([
                         'secondClass_passengers_on_board' => $value
