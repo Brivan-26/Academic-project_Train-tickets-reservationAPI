@@ -11,7 +11,7 @@
         @csrf
         name: <input type='text' name='name'>
         number: <input type='text' name='nb'>
-        tid: <input type='text' name='tid'>
+        tid: <input type='text' name='travel_id'>
         classe: <input type='text' name='classe'>
         boarding: <input type='text' name='boarding_station'>
         landing: <input type='text' name='landing_station'>
@@ -63,6 +63,7 @@
             errorElement.textContent = result.error.message;
             } else {
             // Send the token to your server.
+
             stripeTokenHandler(result.token);
             }
         });

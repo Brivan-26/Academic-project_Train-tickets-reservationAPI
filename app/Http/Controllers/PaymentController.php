@@ -13,7 +13,7 @@ class PaymentController extends Tool
 {
 
     public function create(Request $request){
-        require_once('C:\Users\HP\Documents\Project\2cp_project_API\vendor\autoload.php');
+        require_once('/home/brivan/Me/Projects/2cp_project_api/vendor/autoload.php');
 
         \Stripe\Stripe::setApiKey(env('STRIPE_SECRET'));
 
@@ -39,7 +39,7 @@ class PaymentController extends Tool
         if($request->classe == 'F'){
             $charge = \Stripe\Charge::create(
                 [
-                    "amount" => $this->pricing($id,$request->landing_station, $request->boarding_station)['F'] * count($request->passengers),
+                    "amount" => $this->pricing($request->travel_id,$request->landing_station, $request->boarding_station)['F'] * count($request->passengers),
                     "currency" => "dzd",
                     "customer" => $stripeId,
                     "description" => "Payment for First Class"
@@ -55,12 +55,11 @@ class PaymentController extends Tool
                 ]
             );
         }
-
         foreach($request->passengers as $passenger){
             Ticket::create([
                 'user_id' => $user->id,
-                'travel_id' => $request->tid,
-                'passenger_name' => $passenger->name,
+                'travel_id' => $request->travel_id,
+                'passenger_name' => "passenger",
                 'travel_class' => $request->classe,
                 'payment_method' => 'card',
                 'payment_token' => $charge['id'],
@@ -72,7 +71,7 @@ class PaymentController extends Tool
             ]);
         }
 
-        $this->PassNumberInc($request->tid, $request);
+        $this->PassNumberInc($request->travel_id, $request);
 
         return response()->json([
             "status" => "payment made, ticket created",

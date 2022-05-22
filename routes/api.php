@@ -12,6 +12,7 @@ use App\Http\Repositories\TicketRepository;
 use App\Http\Repositories\UserRepository;
 use Illuminate\Support\Facades\File; 
 use Illuminate\Support\Facades\Storage;
+use App\Http\Controllers\PaymentController;
 
 /*
 |--------------------------------------------------------------------------

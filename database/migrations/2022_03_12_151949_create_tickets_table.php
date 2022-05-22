@@ -20,7 +20,7 @@ return new class extends Migration
             $table->string('passenger_name');
             $table->string('travel_class');
             $table->string('payment_method');
-            $table->string('payment_token')->unique();
+            $table->string('payment_token');
             $table->boolean('validated');
             $table->unsignedBigInteger('boarding_station');
             $table->unsignedBigInteger('landing_station');
