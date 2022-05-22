@@ -22,6 +22,7 @@ return new class extends Migration
             $table->float('estimated_duration');
             $table->text('description');
             $table->string('status');
+            $table->foreignId('validator_id')->nullable();
             $table->timestamps();
 
             $table->foreign('arrival_station')->references('id')->on('stations')->onDelete('cascade');

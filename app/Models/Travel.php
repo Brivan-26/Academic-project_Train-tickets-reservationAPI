@@ -17,7 +17,8 @@ class Travel extends Model
         'distance',
         'estimated_duration',
         'description',
-        'status'
+        'status',
+        'validator_id'
     ];
 
     public function tickets()
@@ -28,7 +29,11 @@ class Travel extends Model
     public function reviews(){
         return $this->hasMany(Review::class, 'travel_id');
     }
-    
+
+    public function validator(){
+        return $this->hasOne(User::class, 'validator_id');
+    }
+
     public function stations()
     {
         return $this->belongsToMany(Station::class)
