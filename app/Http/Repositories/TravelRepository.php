@@ -13,7 +13,7 @@ Class TravelRepository
 {
     public function all()
     {
-        
+
         return Travel::where('status', '!=','completed')->get();
     }
 
@@ -145,10 +145,25 @@ Class TravelRepository
     }
 
 
-    public function travelsOfTheDay(){
-        return [
-            'data' => Travel::whereDate('departure_time', Carbon::today())->get(),
-            'success' => true 
-        ];
+    public function travelOfTheDay(Request $request){
+        $response = [];
+        $validator = Validator::make($request->all(), [
+            'validator_id' => 'required | exists:users,id'
+        ]);
+        if($validator->fails()){
+            $response = [
+                'success' => false,
+                'errors' => $validator->errors()
+            ];
+        } else {
+            $response = [
+            'success' => true,
+            'data' => Travel::where('validator_id', $request->validator_id)
+                            ->where('status', 'underway')
+            ];
+        }
+        return $response;
     }
+
+
 }

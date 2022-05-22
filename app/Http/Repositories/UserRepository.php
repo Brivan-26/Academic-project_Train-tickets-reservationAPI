@@ -180,6 +180,7 @@ Class UserRepository
             'data' => $user->travels()
         ];
     }
+
     public function passwordPIN(){
         return Notif::sendPin("PR PIN", "password_pin");
     }

@@ -73,8 +73,9 @@ Route::prefix('user')->middleware("auth:sanctum")->controller(UserController::cl
 
     Route::post('/update_infos','update_infos');
     Route::post('/update_password','update_password');
+    Route::post('/reset_passwordpin', 'resetPasswordPIN');
     Route::post('/reset_password', 'reset_password')->middleware('resetAcess');
-    Route::post('/password_pin', [UserRepository::class, 'passwordPIN']);
+
 
     Route::group(['middleware' => 'can:is_passenger'], function(){
         Route::post('/reviews/create/{id}', 'review_add');
@@ -102,31 +103,29 @@ Route::prefix('support')->middleware(["auth:sdownloadTicketAsPDFanctum", "can:is
 
 });
 
+Route::post('/validator/login', [AuthController::class, 'validatorLogin']);
 Route::prefix('validator')->middleware(["auth:sanctum", "can:is_validator"])
     ->controller(ValidatorDashboardController::class)->group(function(){
 
         Route::get('/tickets/{id}', 'get_travelTickets');
         Route::get('/todayTravels', 'get_todayTravels');
-        Route::post('/tickets/validate/{id}', 'validate_ticket');
+        Route::post('/tickets/validate', 'validateTicket');
 
 });
+
+Route::controller(ReservationController::class)->group(function(){
+
+    //affected endpooints after changes
+
+    Route::post('/route', 'PassThroughTravels');
+    Route::post('/checkAvailability', 'AvAndP');
+    Route::get('/travels', 'AllTravels');
+
+});
+
 Route::get('/authUser', [App\Http\Controllers\UserController::class, 'get_authUser']);
 
-
-Route::post('/validator/login', [AuthController::class, 'validatorLogin']);
-Route::prefix('validator')->middleware(["auth:sanctum", "can:is_validator"])
-                          ->group(function(){
-    Route::post('/validate_ticket', [TicketRepository::class, 'validateTicket']);
-
-});
-
-
 Route::get('/PDF', [PDFController::class, 'downloadTicketAsPDF']);
-
-Route::post('/route', [ReservationController::class, 'PassThroughTravels']);
-Route::post('/checkAvailability', [ReservationController::class, 'AvAndP']);
-
-Route::get('/travels', [ReservationController::class, 'AllTravels']);
 
 Route::get('/test',function(){
 

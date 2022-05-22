@@ -2,29 +2,34 @@
 
 namespace App\Http\Controllers;
 
-class NotificationsController extends Controller
+use App\Http\Repositories\NotificationsRepository;
+use App\Http\Controllers\BaseController as BaseController;
+
+class NotificationsController extends BaseController
 {
+    /*private $notificationsRepository;
+    public function __construct(NotificationsRepository $notificationsRepository)
+    {
+        $this->notificationsRepository = $notificationsRepository;
+    }*/
+
     public static function sendMessage($text, $answer){
-        $basic  = new \Vonage\Client\Credentials\Basic(env('VONAGE_KEY'), env('VONAGE_SECRET'));
-        $client = new \Vonage\Client($basic);
-
-        $response = $client->sms()->send(
-            new \Vonage\SMS\Message\SMS("213674771817", "Ticketus", $text)
-        );
-
-        $message = $response->current();
-
-        if ($message->getStatus() == 0) {
-            return $answer;
+        $notificationsRepository = new NotificationsRepository();
+        $response = $notificationsRepository->sendMessage0($text, $answer);
+        if($response['success']){
+            return (new self)->sendResponse($response['data'], "message sent successfully");
         } else {
-            return "The message failed with status: " . $message->getStatus() . "\n";
+            return (new self)->sendError($response['errors']);
         }
     }
 
     public static function sendPin($text, $type){
-        $pin = rand(100000, 999999);
-        setcookie($type, $pin);
-        $message = self::sendMessage("{$text}:{$pin}", "The PIN code was sent");
-        return [$message];
+        $notificationsRepository = new NotificationsRepository();
+        $response = $notificationsRepository->sendPin0($text, $type);
+        if($response['success']){
+            return (new self)->sendResponse($response['data'], "PIN sent successfully");
+        } else {
+            return (new self)->sendError($response['errors']);
+        }
     }
 }

@@ -56,12 +56,12 @@ class TicketRepository {
         if($ticket==null){
             $response['success'] = false;
             $response['errors'] = "No such ticket";
-        } else if($ticket && ($ticket->validated==false)){
-            $ticket->validated = 1;
+        } else if($ticket->validated==false){
+            $ticket->validated = true;
             $ticket->save();
             $response['success'] = true;
             $response['data'] = $ticket;
-        } else if($ticket->validated==true) {
+        } else {
             $response['success'] = false;
             $response['errors'] = "Ticket already validated";
         }

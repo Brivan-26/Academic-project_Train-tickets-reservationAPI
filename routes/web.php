@@ -22,4 +22,6 @@ Route::get('/', function () {
 });
 
 Route::view('/essai', 'pay.paypage');
-Route::post('/success', [PaymentController::class, 'create'])->name('success');
+
+//affected endpoint by changes
+Route::post('/success', [PaymentController::class, 'createPayment'])->name('success');
