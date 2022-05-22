@@ -81,7 +81,7 @@ Route::prefix('user')->middleware("auth:sanctum")->controller(UserController::cl
         Route::post('/reviews/create/{id}', 'review_add');
         Route::get('/my_travels', 'get_personnalTravels');
     });
-    Route::post('/payment', [PaymentController::class, 'create']);
+    Route::post('/payment', [PaymentController::class, 'createPayment']);
 });
 
 

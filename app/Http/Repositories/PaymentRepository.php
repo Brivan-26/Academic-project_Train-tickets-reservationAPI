@@ -14,7 +14,7 @@ class PaymentRepository extends Tool
 
     public function create(Request $request){
         $response=[];
-        require_once('C:\Users\HP\Documents\Project\2cp_project_API\vendor\autoload.php');
+        require_once('/home/brivan/Me/Projects/2cp_project_api/vendor/autoload.php');
 
         \Stripe\Stripe::setApiKey(env('STRIPE_SECRET'));
 
@@ -42,7 +42,7 @@ class PaymentRepository extends Tool
             if($request->classe == 'F'){
                 $charge = \Stripe\Charge::create(
                     [
-                        "amount" => $this->prices['data']['F'] * count($request->passengers),
+                        "amount" => $prices['data']['F'] * count($request->passengers),
                         "currency" => "dzd",
                         "customer" => $stripeId,
                         "description" => "Payment for First Class"
@@ -51,19 +51,18 @@ class PaymentRepository extends Tool
             } else if($request->classe == 'S') {
                 $charge = \Stripe\Charge::create(
                     [
-                        "amount" => $this->prices['data']['S'] * count($request->passengers),
+                        "amount" => $prices['data']['S'] * count($request->passengers),
                         "currency" => "dzd",
                         "customer" => $stripeId,
                         "description" => "Payment for Second Class"
                     ]
                 );
             }
-
-            foreach($request->passengers as $passenger){
+            foreach($request->passengers as $pas){
                 Ticket::create([
                     'user_id' => $user->id,
                     'travel_id' => $request->tid,
-                    'passenger_name' => $passenger->name,
+                    'passenger_name' => $pas["first_name"]. " " .$pas["last_name"],
                     'travel_class' => $request->classe,
                     'payment_method' => 'card',
                     'payment_token' => $charge['id'],
