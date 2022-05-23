@@ -156,10 +156,18 @@ Class TravelRepository
                 'errors' => $validator->errors()
             ];
         } else {
+            $todayTravels = collect();
+            $validatorTravels = Travel::where('validator_id', $request->validator_id)->get();
+            $Today = date("Y-m-d", strtotime(now()));
+            foreach($validatorTravels as $travel){
+                $travelTime = date("Y-m-d", strtotime($travel->departure_time));
+                if($travelTime==$Today){
+                    $todayTravels->push($travel);
+                }
+            }
             $response = [
             'success' => true,
-            'data' => Travel::where('validator_id', $request->validator_id)
-                            ->where('status', 'underway')
+            'data' => $todayTravels
             ];
         }
         return $response;
