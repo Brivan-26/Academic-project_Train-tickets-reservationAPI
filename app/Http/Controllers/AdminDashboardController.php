@@ -44,7 +44,7 @@ class AdminDashboardController extends BaseController
     {
         $response = $this->userRepository->deleteById($id);
         if($response["success"]) {
-            return $this->sendResponse(new UserResource($response["data"]), 'User deleted succefully');
+            return $this->sendResponse(UserResource::collection($response["data"]), 'User deleted succefully');
         }else {
             return $this->sendError('Something went wrong!', $response["errors"]);
         }

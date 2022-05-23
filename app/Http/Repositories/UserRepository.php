@@ -8,7 +8,6 @@ use Illuminate\Support\Facades\Hash;
 use App\Http\Controllers\NotificationsController as Notif;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage; 
-
 Class UserRepository
 {
     public static function all()
@@ -83,7 +82,7 @@ Class UserRepository
         if($user) {
             $user->delete();
             $response["success"] = true;
-            $response["data"] = $user;
+            $response["data"] = User::all();
             return $response;
         }
         $response["success"] = false;
