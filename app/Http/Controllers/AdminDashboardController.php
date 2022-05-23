@@ -177,7 +177,6 @@ class AdminDashboardController extends BaseController
     public function tickets()
     {
         $tickets = $this->ticketRepository->all();
-        return $tickets;
         if($tickets) {
             return $this->sendResponse(TicketResource::collection($tickets), 'Tickets succefully retrieved!');
         }else {
