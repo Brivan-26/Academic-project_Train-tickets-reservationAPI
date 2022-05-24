@@ -147,31 +147,27 @@ Class TravelRepository
 
     public function travelOfTheDay(Request $request){
         $response = [];
-        $validator = Validator::make($request->all(), [
-            'validator_id' => 'required | exists:users,id'
-        ]);
-        if($validator->fails()){
+        $id = auth('sanctum')->id();
+        $todayTravels = collect();
+        $validatorTravels = Travel::where('validator_id', $id)->get();
+        $Today = date("Y-m-d", strtotime(now()));
+        foreach($validatorTravels as $travel){
+            $travelTime = date("Y-m-d", strtotime($travel->departure_time));
+            if($travelTime==$Today){
+                $todayTravels->push($travel);
+             }
+        }
+        if($travelTime!=null){
             $response = [
-                'success' => false,
-                'errors' => $validator->errors()
+                'success' => true,
+                'data' => $todayTravels
             ];
         } else {
-            $todayTravels = collect();
-            $validatorTravels = Travel::where('validator_id', $request->validator_id)->get();
-            $Today = date("Y-m-d", strtotime(now()));
-            foreach($validatorTravels as $travel){
-                $travelTime = date("Y-m-d", strtotime($travel->departure_time));
-                if($travelTime==$Today){
-                    $todayTravels->push($travel);
-                }
-            }
             $response = [
-            'success' => true,
-            'data' => $todayTravels
+                'success' => false,
+                'errors' => "No travels found for today"
             ];
         }
         return $response;
     }
-
-
 }

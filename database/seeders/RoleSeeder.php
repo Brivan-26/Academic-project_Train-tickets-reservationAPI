@@ -24,7 +24,7 @@ class RoleSeeder extends Seeder
             'name' => 'support'
         ]);
         Role::create([
-            'name' => 'verifier'
+            'name' => 'validator'
         ]);
     }
 }

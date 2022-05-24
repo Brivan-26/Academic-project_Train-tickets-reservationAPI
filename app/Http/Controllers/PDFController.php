@@ -6,13 +6,11 @@ use Illuminate\Http\Request;
 use Barryvdh\DomPDF\Facade\Pdf as PDF;
 use App\Models\Ticket;
 use App\Models\Travel;
-use Illuminate\Support\Facades\DB;
 
 class PDFController extends Controller
 {
     public function downloadTicketAsPDF(Request $request){
         $id = auth('sanctum')->id();
-        $id=20;
         $tickets = collect();
         $travelTickets = Travel::find($request->travel_id)->tickets;
         foreach($request->passengers as $passenger){
