@@ -18,7 +18,7 @@ class TicketResource extends JsonResource
         // return parent::toArray($request);
         return [
             'id' => $this->id,
-            //'payer' =>  $this->user->first_name." ".$this->user->last_name,
+            'payer' =>  $this->user->first_name. ' '. $this->user->last_name,
             'travel_id' => $this->travel_id,
             'passenger_name' => $this->passenger_name,
             'travel_class' => $this->travel_class,
@@ -28,7 +28,7 @@ class TicketResource extends JsonResource
             'boarding_station' => new StationResource($this->boardStation),
             'landing_station' => new StationResource($this->landStation),
             'price' => $this->price,
-            //'created_at' => $this->created_at->diffForHumans(),
+            'created_at' => $this->created_at ? ($this->created_at->diffForHumans()) : null,
             //'updated_at' => $this->updated_at ? $this->updated_at->diffForHumans(): $this->updated_at
         ];
     }

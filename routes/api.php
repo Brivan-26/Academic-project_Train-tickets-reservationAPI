@@ -127,7 +127,4 @@ Route::get('/authUser', [App\Http\Controllers\UserController::class, 'get_authUs
 
 Route::get('/PDF', [PDFController::class, 'downloadTicketAsPDF']);
 
-Route::get('/test',function(){
 
-    return;
-});
