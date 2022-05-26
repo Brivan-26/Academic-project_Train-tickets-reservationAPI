@@ -3,6 +3,8 @@
 namespace App\Http\Resources;
 
 use Illuminate\Http\Resources\Json\JsonResource;
+use App\Http\Resources\StationResource as StationResource;
+use App\Models\Station;
 class TravelResource extends JsonResource
 {
     /**
@@ -16,8 +18,8 @@ class TravelResource extends JsonResource
         // return parent::toArray($request);
         return [
             'id' => $this->id,
-            'departure_station' => $this->departure_station,
-            'arrival_station' => $this->arrival_station,
+            'departure_station' => new StationResource(Station::find($this->departure_station)),
+            'arrival_station' => new StationResource(Station::find($this->arrival_station)),
             'departure_time' => $this->departure_time,
             'distance' => $this->distance,
             'estimated_duration' => $this->estimated_duration,
