@@ -91,6 +91,7 @@ Class TravelRepository
                 $response["errors"] = $validator->errors();
                 return $response;
             }else {
+                
                 $travel->departure_station = $request->departure_station;
                 $travel->departure_time = $request->departure_time;
                 $travel->arrival_station = $request->arrival_station;
