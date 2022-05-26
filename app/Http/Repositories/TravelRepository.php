@@ -3,7 +3,8 @@
 namespace App\Http\Repositories;
 
 use App\Models\Travel;
-use App\Http\Controllers\NotificationsController as Notif;
+//use App\Http\Controllers\NotificationsController as Notif;
+use App\Http\Repositories\NotificationsRepository as Notif;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Http\Request;
 use Carbon\Carbon;
@@ -65,8 +66,8 @@ Class TravelRepository
         $arriv = new Carbon($request->stations[count($request->stations)-1]["arrival_time"]);
         $travel->refresh();
         RenderTravelCompleted::dispatch($travel)
-                    ->delay((new Carbon($arriv))
-                            ->addHours(-2));
+                    ->delay($arriv)
+                    ->addHours(-2);
 
         $response["success"] = true;
         $response["data"] = $travel;
@@ -99,7 +100,7 @@ Class TravelRepository
                 $travel->description = $request->description;
                 if($request->status=='delayed'){
                     $travel->status = $request->status;
-                    $message = Notif::sendMessage("Travel delayed to {$request->departure_time}",
+                    $message = Notif::sendMessage0("Travel delayed to {$request->departure_time}",
                                                 "the user was notified");
                 } else if($request->status=='cancelled'){
                     $travel->status = $request->status;
@@ -109,7 +110,7 @@ Class TravelRepository
                             'charge' => $ticket->payment_token,
                         ]);
                     }
-                    $message = Notif::sendMessage("Travel cancelled, refunded",
+                    $message = Notif::sendMessage0("Travel cancelled, refunded",
                                                 "the user was notified");
                 }
                 else $travel->status = $request->status;

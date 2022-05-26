@@ -10,7 +10,7 @@ use App\Http\Controllers\UserController;
 use App\Http\Controllers\ReservationController;
 use App\Http\Repositories\TicketRepository;
 use App\Http\Repositories\UserRepository;
-use Illuminate\Support\Facades\File; 
+use Illuminate\Support\Facades\File;
 use Illuminate\Support\Facades\Storage;
 use App\Http\Controllers\PaymentController;
 
@@ -115,7 +115,7 @@ Route::prefix('validator')->middleware(["auth:sanctum", "can:is_validator"])
 
 Route::controller(ReservationController::class)->group(function(){
 
-    //affected endpooints after changes
+    //affected endpoints after changes
 
     Route::post('/route', 'PassThroughTravels');
     Route::post('/checkAvailability', 'AvAndP');

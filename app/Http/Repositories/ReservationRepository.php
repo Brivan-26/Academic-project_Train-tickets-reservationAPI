@@ -10,6 +10,7 @@ use App\Http\Controllers\BaseController as BaseController;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Validator;
 use App\Models\Station;
+use PackageVersions\FallbackVersions;
 
 class ReservationRepository
 {
@@ -76,12 +77,22 @@ class ReservationRepository
             return $response;
         }
         $travel = Travel::find($request->travelId);
+        if($travel==null){
+            $response['success'] = false;
+            $response['errors'] = "This travel was not found";
+            return $response;
+        }
         $Path = False;
         $Seats = 0;
         if($request->classe=="F"){
             foreach($travel->stations as $station){
                 if($station->id == $request->boarding_station){
                     $Path = True;
+                }
+                if($station->id == $travel->arrival_station && $station->id != $request->landing_station){
+                    $response['success'] = false;
+                    $response['errors'] = "This travel doesn't go that far";
+                    return $response;
                 }
                 if($station->id == $request->landing_station){
                     break;
@@ -104,14 +115,24 @@ class ReservationRepository
                     }
                 }
             }
-            //return $this->sendResponse($Seats, "There are {$Seats} Places Available");
-            $response['success'] = true;
-            $response['data'] = $Seats;
+            if($Path){
+                //return $this->sendResponse($Seats, "There are {$Seats} Places Available");
+                $response['success'] = true;
+                $response['data'] = $Seats;
+            } else {
+                $response['success'] = false;
+                $response['errors'] = "No such route in this travel";
+            }
         }
         else if ($request->classe=="S"){
             foreach($travel->stations as $station){
                 if($station->id == $request->boarding_station){
                     $Path = True;
+                }
+                if($station->id == $travel->arrival_station && $station->id != $request->landing_station){
+                    $response['success'] = false;
+                    $response['errors'] = "This travel doesn't go that far";
+                    return $response;
                 }
                 if($station->id == $request->landing_station){
                     break;
@@ -134,9 +155,14 @@ class ReservationRepository
                     }
                 }
             }
-            //return $this->sendResponse($Seats, "There are {$Seats} Places Available");
-            $response['success'] = true;
-            $response['data'] = $Seats;
+            if($Path){
+                //return $this->sendResponse($Seats, "There are {$Seats} Places Available");
+                $response['success'] = true;
+                $response['data'] = $Seats;
+            } else {
+                $response['success'] = false;
+                $response['errors'] = "No such route in this travel";
+            }
         }
         return $response;
     }
