@@ -5,9 +5,10 @@ use App\Models\User;
 use Illuminate\Validation\Rule;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Facades\Hash;
-use App\Http\Controllers\NotificationsController as Notif;
+//use App\Http\Controllers\NotificationsController as Notif;
+use App\Http\Repositories\NotificationsRepository as Notif;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Storage; 
+use Illuminate\Support\Facades\Storage;
 Class UserRepository
 {
     public static function all()
@@ -46,7 +47,7 @@ Class UserRepository
             };
             $path = Storage::disk('public')->put('users/avatars', $request->file('image'));
             $auth->profile_img = $path;
-            
+
             $auth->save();
             $response['success'] = true ;
             $response['data'] = $auth;
@@ -147,7 +148,7 @@ Class UserRepository
     }
 
     public function validationPIN(){
-        Notif::sendPin("Validation PIN", "validation");
+        Notif::sendPin0("Validation PIN", "validation");
     }
 
     public function validateAccount(Request $request){
@@ -180,8 +181,18 @@ Class UserRepository
         ];
     }
 
-    public function passwordPIN(){
-        return Notif::sendPin("PR PIN", "password_pin");
+    public function passwordPIN(Request $request){
+        $validator = Validator::make($request->all(), [
+            'phone_number' => 'required'
+        ]);
+        if($validator->fails()){
+            return response()->json([
+                'success' => false,
+                'message' => $validator->errors()
+            ]);
+        }
+        setcookie("phone_number", $request->phone_number);
+        return Notif::sendPin0("PR PIN", "password_pin");
     }
 
     public function PINconfirmation(Request $request){
@@ -197,7 +208,8 @@ Class UserRepository
     }
 
     public function reset_userPassword(Request $request){
-        $id = auth()->user()->id;
+        $phone_number = $request->cookie('phone_number');
+        $id = User::where('phone_number', $phone_number)->first()->id;
         $validator = Validator::make($request->all(), [
             'new_password' => 'required|string|min:8',
             'confirm_new_password' => 'required|string|same:new_password',

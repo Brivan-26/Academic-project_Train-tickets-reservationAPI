@@ -4,7 +4,7 @@ namespace App\Http\Repositories;
 
 class NotificationsRepository
 {
-    public function sendMessage0($text, $answer){
+    public static function sendMessage0($text, $answer){
         $response1 = [];
         $basic  = new \Vonage\Client\Credentials\Basic(env('VONAGE_KEY'), env('VONAGE_SECRET'));
         $client = new \Vonage\Client($basic);
@@ -21,18 +21,15 @@ class NotificationsRepository
                 'data' => $answer
             ];
         } else {
-            $response1 =[
-                'success' => false,
-                'errors' =>"The message failed with status: " . $message->getStatus() . "\n"
-            ];
+            $response1['success'] = false;
+            $response1['errors'] = " The message failed with status: {$message->getStatus()}";
         }
         return $response1;
     }
 
-    public function sendPin0($text, $type){
+    public static function sendPin0($text, $type){
         $pin = rand(100000, 999999);
         setcookie($type, $pin);
-        $response = $this->sendMessage0("{$text}:{$pin}", "The PIN code was sent");
-        return $response;
+        return (new self)->sendMessage0("{$text}:{$pin}", "The PIN code was sent");
     }
 }

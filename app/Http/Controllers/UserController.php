@@ -58,7 +58,7 @@ class UserController extends BaseController
     public function get_personnalTravels()
     {
         $response = $this->userRepository->get_travelsHistory();
-        return $this->sendResponse(DetailedTravelResource::Collection($response['data']), 
+        return $this->sendResponse(DetailedTravelResource::Collection($response['data']),
         "Personnal travels retreived successfully");
     }
 
@@ -71,10 +71,10 @@ class UserController extends BaseController
         return $this->sendError("Something went wrong",$response['errors']);
     }
 
-    public function resetPasswordPIN(){
-        $response = json_decode($this->userRepository->passwordPIN());
+    public function resetPasswordPIN(Request $request){
+        $response = $this->userRepository->passwordPIN($request);
         if($response['success']){
-            return $this->sendResponse(new userResource($response['data']),
+            return $this->sendResponse($response['data'],
             "Password reset PIN sent successfully");
         }
         return $this->sendError($response['errors']);
