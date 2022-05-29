@@ -34,10 +34,16 @@ class TicketRepository {
         return $response;
     }
 
-    public function getByTravelId($id)
+    public function getByTicketsByTravelId($id)
     {
         $response = [];
         $travel = Travel::find($id);
+        $id = auth('sanctum')->id();
+        if($id!=$travel->validator_id){
+            $response["success"] = false;
+            $response["errors"] = "This travel isn't assigned to this validator";
+            return $response;
+        }
         if(!$travel) {
             $response["success"] = false;
             $response["errors"] = 'No travel found with specified id';

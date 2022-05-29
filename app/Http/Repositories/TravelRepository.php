@@ -77,43 +77,27 @@ Class TravelRepository
     public function updateByRequest(Request $request, $travelId) {
         $response = [];
         $travel = Travel::find($travelId);
-        if($travel) {
+        if($travel!=null) {
             $validator = Validator::make($request->all(), [
-                'departure_station' => 'required|string',
                 'departure_time' => 'required',
-                'arrival_station' => 'required',
-                'distance' => 'required',
-                'status' => 'required',
                 'estimated_duration' => 'required',
-                'description' => 'required',
             ]);
             if($validator->fails()) {
                 $response["success"] = false;
                 $response["errors"] = $validator->errors();
                 return $response;
-            }else {
-                $travel->departure_station = $request->departure_station;
-                $travel->departure_time = $request->departure_time;
-                $travel->arrival_station = $request->arrival_station;
-                $travel->distance = $request->distance;
-                $travel->estimated_duration = $request->estimated_duration;
-                $travel->description = $request->description;
-                if($request->status=='delayed'){
-                    $travel->status = $request->status;
-                    $message = Notif::sendMessage0("Travel delayed to {$request->departure_time}",
-                                                "the user was notified");
-                } else if($request->status=='cancelled'){
-                    $travel->status = $request->status;
-                    foreach($travel->tickets as $ticket){
-                        $stripe = new \Stripe\StripeClient(env('STRIPE_SECRET'));
-                        $stripe->refunds->create([
-                            'charge' => $ticket->payment_token,
-                        ]);
-                    }
-                    $message = Notif::sendMessage0("Travel cancelled, refunded",
-                                                "the user was notified");
+            } else {
+                if($request->departure_time < $travel->departure_time){
+                    $response['success'] = false;
+                    $response['errors'] = "Cannot update departure time to a preceding date";
+                    return $response;
                 }
-                else $travel->status = $request->status;
+                $travel->departure_time = $request->departure_time;
+                $travel->estimated_duration = $request->estimated_duration;
+                $travel->status = "delayed";
+                $message = Notif::sendMessage0("Travel delayed to {$request->departure_time}",
+                                          "the user was notified");
+
                 $travel->save();
                 $response['notified'] = $message;
                 $response["success"] = true;
@@ -126,6 +110,30 @@ Class TravelRepository
             return $response;
         }
     }
+
+    public function cancelByRequest($travelId){
+        $travel = Travel::find($travelId);
+        if($travel==null){
+            $response['success'] = false;
+            $response['errors'] = "No travel found";
+            return $response;
+        }
+        foreach($travel->tickets as $ticket){
+            $stripe = new \Stripe\StripeClient(env('STRIPE_SECRET'));
+            $stripe->refunds->create([
+                'charge' => $ticket->payment_token,
+            ]);
+            }
+            $message = Notif::sendMessage0("Travel cancelled, refunded",
+                                        "the user was notified");
+            $response['notified'] = $message;
+            $travel->status = "cancelled";
+            $travel->departure_time = null;
+            $travel->save();
+            $response["success"] = true;
+            $response["data"] = $travel;
+            return $response;
+        }
 
     public function deleteById($travelId)
     {
@@ -146,7 +154,7 @@ Class TravelRepository
     }
 
 
-    public function travelOfTheDay(Request $request){
+    public function travelOfTheDay(){
         $response = [];
         $id = auth('sanctum')->id();
         $todayTravels = collect();

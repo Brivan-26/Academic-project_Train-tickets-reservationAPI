@@ -22,8 +22,8 @@ class AdminDashboardController extends BaseController
     private $ticketRepository;
     private $reviewRepository;
 
-    public function __construct(UserRepository $userRepository, 
-                TravelRepository $travelRepository, StationRepository $stationRepository, 
+    public function __construct(UserRepository $userRepository,
+                TravelRepository $travelRepository, StationRepository $stationRepository,
                 TicketRepository $ticketRepository, ReviewRepository $reviewRepository)
     {
         $this->userRepository = $userRepository;
@@ -40,7 +40,7 @@ class AdminDashboardController extends BaseController
         return $this->sendResponse(UserResource::collection($users), 'succefully logged the necessary data!');
     }
 
-    public function delete_user($id) 
+    public function delete_user($id)
     {
         $response = $this->userRepository->deleteById($id);
         if($response["success"]) {
@@ -49,7 +49,7 @@ class AdminDashboardController extends BaseController
             return $this->sendError('Something went wrong!', $response["errors"]);
         }
     }
-    
+
     public function restore_user($id)
     {
         $response = $this->userRepository->restoreById($id);
@@ -60,7 +60,7 @@ class AdminDashboardController extends BaseController
         }
     }
 
-    public function destory_user($id) 
+    public function destory_user($id)
     {
         $response = $this->userRepository->destoryById($id);
         if($response["success"]) {
@@ -135,7 +135,7 @@ class AdminDashboardController extends BaseController
 
     public function station_update(Request $request, $id)
     {
-        $response = $this->stationRepository->updateByRequest($request, $id); 
+        $response = $this->stationRepository->updateByRequest($request, $id);
         if($response["success"]) {
             return $this->sendResponse(new StationResource($response["data"]), 'Station is succefully updated!');
         }else {
@@ -152,7 +152,7 @@ class AdminDashboardController extends BaseController
             return $this->sendError('Something went wrong!', $response["errors"]);
         }
     }
-   
+
     public function station_restore($id)
     {
         $response = $this->stationRepository->restoreById($id);
@@ -187,7 +187,7 @@ class AdminDashboardController extends BaseController
     public function tickets_nonExpired()
     {
         $tickets = $this->ticketRepository->getTicketsNonExpired();
-        
+
         if($tickets) {
             return $this->sendResponse(TicketResource::collection($tickets), 'Succefully retreived tickets!');
         }else {
@@ -214,7 +214,13 @@ class AdminDashboardController extends BaseController
         return $this->sendError("Something went wrong !",$response['errors']);
     }
 
-
-   
-
+    public function cancel_travel($travelId){
+        $response = $this->travelRepository->cancelByRequest($travelId);
+        if($response['success']){
+            return $this->sendResponse(new TravelResource($response['data']),
+                                        "Travel deleted successfully");
+        } else {
+            return $this->sendError("Something went wrong", $response['errors']);
+        }
+    }
 }

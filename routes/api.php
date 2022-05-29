@@ -48,6 +48,7 @@ Route::prefix('admin')->middleware(['auth:sanctum', 'can:is_admin'])->controller
         Route::post('/travel', 'travel_create');
         Route::put('/travel/{id}', 'travel_update');
         Route::get('/travel/delete/{id}', 'travel_delete');
+        Route::post('/travel/cancel/{id}', 'cancel_travel');
 
         // Station CRUD operations
 

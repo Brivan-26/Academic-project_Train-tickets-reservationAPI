@@ -20,7 +20,7 @@ class ValidatorDashboardController extends BaseController
     }
 
     public function get_travelTickets($id){
-        $response = $this->ticketRepository->getByTravelId($id);
+        $response = $this->ticketRepository->getByTicketsByTravelId($id);
         if($response['success']){
             return $this->sendResponse(TicketResource::collection($response['data']),
                                         "Tickets retreived successfully");
@@ -40,8 +40,8 @@ class ValidatorDashboardController extends BaseController
         return $this->sendError('SOMETHING_WENT_WRONG', $response['errors']);
     }
 
-    public function get_todayTravels(Request $request){
-        $response = $this->travelRepository->travelOfTheDay($request);
+    public function get_todayTravels(){
+        $response = $this->travelRepository->travelOfTheDay();
         if($response['success']) {
             return $this->sendResponse(DetailedTravelResource::collection($response['data']),
                                         "Travels retreived successfully");

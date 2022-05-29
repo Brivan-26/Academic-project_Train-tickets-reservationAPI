@@ -17,7 +17,7 @@ return new class extends Migration
             $table->bigIncrements('id');
             $table->foreignId('arrival_station');
             $table->foreignId('departure_station');
-            $table->timestamp('departure_time');
+            $table->timestamp('departure_time')->nullable();
             $table->float('distance');
             $table->float('estimated_duration');
             $table->text('description');

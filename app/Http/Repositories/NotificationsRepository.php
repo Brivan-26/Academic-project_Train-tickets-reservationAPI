@@ -10,7 +10,7 @@ class NotificationsRepository
         $client = new \Vonage\Client($basic);
 
         $response = $client->sms()->send(
-            new \Vonage\SMS\Message\SMS("213674771817", "Ticketus", $text)
+            new \Vonage\SMS\Message\SMS("213561471402", "Ticketus", $text)
         );
 
         $message = $response->current();
