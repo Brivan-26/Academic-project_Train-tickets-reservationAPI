@@ -166,7 +166,7 @@ Class TravelRepository
                 $todayTravels->push($travel);
              }
         }
-        if($travelTime!=null){
+        if($todayTravels!=null){
             $response = [
                 'success' => true,
                 'data' => $todayTravels
