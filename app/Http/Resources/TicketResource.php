@@ -24,7 +24,7 @@ class TicketResource extends JsonResource
             'travel_class' => $this->travel_class,
             'payment_method' => $this->payment_method,
             //'payment_token' => $this->payment_token,
-            'validated' => $this->validated,
+            'validated' => $this->validated == 1,
             'boarding_station' => new StationResource($this->boardStation),
             'landing_station' => new StationResource($this->landStation),
             'price' => $this->price,
