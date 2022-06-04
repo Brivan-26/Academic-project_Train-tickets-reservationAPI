@@ -55,6 +55,34 @@ Class UserRepository
         return $response;
     }
 
+    public function update_userInfosNoPic($request){
+        $response = [];
+        $id = auth()->user()->id ;
+        $validator = Validator::make($request->all(), [
+            'phone_number' => [
+                'required','string',
+                Rule::unique('users')->ignore($id),
+            ],
+            'first_name' => ['required','string','min:4','max:10'],
+            'last_name' => ['required','string','min:4','max:10'],
+        ]);
+        if($validator->fails()){
+            $response['success'] = false ;
+            $response['errors'] = $validator->errors();
+        }
+        else{
+            $auth = User::find($id);
+            $auth->phone_number = $request->phone_number;
+            $auth->first_name = $request->first_name;
+            $auth->last_name = $request->last_name;
+
+            $auth->save();
+            $response['success'] = true ;
+            $response['data'] = $auth;
+        }
+        return $response;
+    }
+
     public function update_userPassword($request){
         $id = auth()->user()->id;
         $validator = Validator::make($request->all(), [
