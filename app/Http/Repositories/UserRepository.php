@@ -186,25 +186,31 @@ Class UserRepository
             'phone_number' => 'required'
         ]);
         if($validator->fails()){
-            return response()->json([
-                'success' => false,
-                'message' => $validator->errors()
-            ]);
+            $response['success'] = false;
+            $response['errors'] = $validator->errors();
+            return $response;
         }
         setcookie("phone_number", $request->phone_number);
         return Notif::sendPin0("PR PIN", "password_pin");
     }
 
     public function PINconfirmation(Request $request){
+        $response = [];
         $givenPin = $request->password_pin;
         if($request->cookie('password_pin')!=null){
             if($request->cookie('password_pin')==$givenPin){
-                return True;
+                $response['success'] = True;
+                $response['data'] = $request->cookie('password_pin');
+                return $response;
             } else {
-                return False;
+                $response['success'] = False;
+                $response['erros'] = "Wrong PIN";
+                return $response;
             }
         }
-        return False;
+        $response['success'] = False;
+        $response['erros'] = "No PIN was sent/The Pin is now invalid";
+        return $response;
     }
 
     public function reset_userPassword(Request $request){
@@ -224,6 +230,7 @@ Class UserRepository
             $auth->save();
             $response['success'] = true;
             $response['data'] =$auth;
+            unset($request->cookie('phone_number'));
         }
         return $response;
     }

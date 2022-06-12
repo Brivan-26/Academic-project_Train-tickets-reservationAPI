@@ -31,11 +31,11 @@ class TicketSeeder extends Seeder
                 'travel_class' => 'F',
                 'payment_method' => 'card',
                 'payment_token' => Str::random(11),
-                'validated' => 0,
+                'validated' => false,
                 'boarding_station' => $randomStation1->id,
                 'landing_station' => $randomStation2->id,
                 'price' => 1000,
-                'qrcode_token' => Str::random(40)
+                'qrcode_token' => Str::random(64)
             ]);
         }
     }

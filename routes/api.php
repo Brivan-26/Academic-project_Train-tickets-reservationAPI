@@ -68,13 +68,15 @@ Route::prefix('admin')->middleware(['auth:sanctum', 'can:is_admin'])->controller
 
 });
 
+
+Route::post('/resetpassword_pin', [UserController::class, 'resetPasswordPIN']);
+Route::post('/passwordpin_confimartion', [UserController::class, 'confirmPasswordPIN']);
+Route::post('/reset_password', [UserController::class, 'reset_password']);
 Route::prefix('user')->middleware("auth:sanctum")->controller(UserController::class)
                                                  ->group(function(){
 
     Route::post('/update_infos','update_infos');
     Route::post('/update_password','update_password');
-    Route::post('/reset_passwordpin', 'resetPasswordPIN');
-    Route::post('/reset_password', 'reset_password')->middleware('resetAcess');
 
 
     Route::group(['middleware' => 'can:is_passenger'], function(){
