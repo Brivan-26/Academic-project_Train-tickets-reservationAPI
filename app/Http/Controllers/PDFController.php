@@ -12,7 +12,7 @@ class PDFController extends Controller
     public function downloadTicketAsPDF(Request $request){
         $id = auth('sanctum')->id();
         $tickets = collect();
-        $travelTickets = Travel::find($request->travel_id)->tickets;
+        $travelTickets = Travel::find((int)$request->travel_id)->tickets;
         foreach($request->passengers as $passenger){
             $name = $passenger['first_name'].' '.$passenger['last_name'];
             foreach($travelTickets as $ticket){
