@@ -35,7 +35,7 @@ Route::controller(AuthController::class)->group(function(){
 });
 Route::prefix('admin')->middleware(['auth:sanctum', 'can:is_admin'])->controller(AdminDashboardController::class)->group(function () {
         Route::get('/home', 'index');
-
+    
         // User CRUD operations
         Route::get('/user/delete/{id}', 'delete_user');
         Route::get('/user/restore/{id}', 'restore_user');
@@ -63,6 +63,7 @@ Route::prefix('admin')->middleware(['auth:sanctum', 'can:is_admin'])->controller
         Route::get('/tickets', 'tickets');
         Route::get('/tickets/nonExpired', 'tickets_nonExpired');
         Route::get('/ticket/{id}', 'ticket_get');
+        Route::get('tickets/revenue', 'getTicketsRevenue');
 
         // Reviews
         Route::get('reviews/{id}', 'reviews_get');
@@ -128,5 +129,4 @@ Route::controller(ReservationController::class)->group(function(){
 Route::get('/authUser', [App\Http\Controllers\UserController::class, 'get_authUser']);
 
 Route::get('/PDF', [PDFController::class, 'downloadTicketAsPDF']);
-
 

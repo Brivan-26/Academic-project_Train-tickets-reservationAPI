@@ -73,4 +73,27 @@ class TicketRepository {
         }
         return $response;
     }
+
+    public function getRevenue(){
+        $response = [];
+        $tickets = Ticket::all();
+        $data = [
+            "January" => 0,
+            "February" => 0,
+            "March" => 0,
+            "April" => 0,
+            "May" => 0,
+            "June" => 0,
+            "July" => 0,
+            "August" => 0,
+            "September" => 0,
+        ];
+        foreach($tickets as $ticket){
+            $month = date("F", strtotime($ticket->created_at));
+            $data[$month] +=1;
+        }
+        $response["success"] = true;
+        $reponse["data"] = $data;
+        return $reponse;
+    }
 }
