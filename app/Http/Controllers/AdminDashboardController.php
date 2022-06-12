@@ -223,4 +223,10 @@ class AdminDashboardController extends BaseController
             return $this->sendError("Something went wrong", $response['errors']);
         }
     }
+
+    public function getTicketsRevenue(){
+        $response = $this->ticketRepository->getRevenue();
+        return $this->sendResponse($response['data'],
+                                        "Revenue retreived successfully");
+    }
 }
