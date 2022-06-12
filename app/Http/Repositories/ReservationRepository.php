@@ -221,15 +221,18 @@ class ReservationRepository
         $i=0;
         $Nb=0;
         foreach($travel->stations as $station){
+
             if($station->id==$boarding){
                 $i=1;
             }
+
             if($i==1){
                 $Nb++;
             }
             if($station->id==$landing){
                 break;
             }
+
         }
         return $Nb;
     }

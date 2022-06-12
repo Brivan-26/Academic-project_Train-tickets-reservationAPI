@@ -35,7 +35,7 @@ class TicketSeeder extends Seeder
                 'boarding_station' => $randomStation1->id,
                 'landing_station' => $randomStation2->id,
                 'price' => 1000,
-                'qrcode_token' => Str::random(40)
+                'qrcode_token' => Str::random(64)
             ]);
         }
     }

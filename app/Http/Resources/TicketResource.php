@@ -28,6 +28,7 @@ class TicketResource extends JsonResource
             'validated' => $this->validated == 1,
             'boarding_station' => new StationResource($this->boardStation),
             'landing_station' => new StationResource($this->landStation),
+            'qrcode_token' => $this->qrcode_token,
             'price' => $this->price,
             'created_at' => $this->created_at ? ($this->created_at->diffForHumans()) : null,
             //'updated_at' => $this->updated_at ? $this->updated_at->diffForHumans(): $this->updated_at

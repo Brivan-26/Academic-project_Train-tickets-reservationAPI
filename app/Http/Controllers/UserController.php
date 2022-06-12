@@ -71,6 +71,15 @@ class UserController extends BaseController
         return $this->sendError("Something went wrong",$response['errors']);
     }
 
+    public function confirmPasswordPIN(Request $request){
+        $response = $this->userRepository->PINconfirmation($request);
+        if($response['success']){
+            return $this->sendResponse($response['data'], "Given PIN is valid");
+        } else {
+            return $this->sendError("Something Went Wrong", $response['errors']);
+        }
+    }
+
     public function resetPasswordPIN(Request $request){
         $response = $this->userRepository->passwordPIN($request);
         if($response['success']){
@@ -79,4 +88,6 @@ class UserController extends BaseController
         }
         return $this->sendError($response['errors']);
     }
+
+
 }
