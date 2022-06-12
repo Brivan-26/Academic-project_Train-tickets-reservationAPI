@@ -67,7 +67,8 @@ class TravelStationSeeder extends Seeder
                     DB::table('station_travel')->where('travel_id', $i)
                                                ->where('station_id', $station->id)->update([
                         'firstClass_price' => $prices['data']['F'] / 100,
-                        'secondClass_price' => $prices['data']['S'] / 100
+                        'secondClass_price' => $prices['data']['S'] / 100,
+                        'arrival_time' => $res->arrivalTime($i, $travel->departure_station, $id)
                     ]);
                 }
             }
@@ -108,7 +109,8 @@ class TravelStationSeeder extends Seeder
                     DB::table('station_travel')->where('travel_id', $i)
                                                ->where('station_id', $station->id)->update([
                         'firstClass_price' => $prices['data']['F'] / 100,
-                        'secondClass_price' => $prices['data']['S'] / 100
+                        'secondClass_price' => $prices['data']['S'] / 100,
+                        'arrival_time' => $res->arrivalTime($i, $travel->departure_station, $id)
                     ]);
                 }
             }
@@ -159,7 +161,8 @@ class TravelStationSeeder extends Seeder
                     DB::table('station_travel')->where('travel_id', $i)
                                                ->where('station_id', $station->id)->update([
                         'firstClass_price' => $prices['data']['F'] / 100,
-                        'secondClass_price' => $prices['data']['S'] / 100
+                        'secondClass_price' => $prices['data']['S'] / 100,
+                        'arrival_time' => $res->arrivalTime($i, $travel->departure_station, $id)
                     ]);
                 }
             }
@@ -200,7 +203,8 @@ class TravelStationSeeder extends Seeder
                     DB::table('station_travel')->where('travel_id', $i)
                                                ->where('station_id', $station->id)->update([
                         'firstClass_price' => $prices['data']['F'] / 100,
-                        'secondClass_price' => $prices['data']['S'] / 100
+                        'secondClass_price' => $prices['data']['S'] / 100,
+                        'arrival_time' => $res->arrivalTime($i, $travel->departure_station, $id)
                     ]);
                 }
             }
@@ -261,7 +265,8 @@ class TravelStationSeeder extends Seeder
                     DB::table('station_travel')->where('travel_id', $i)
                                                ->where('station_id', $station->id)->update([
                         'firstClass_price' => $prices['data']['F'] / 100,
-                        'secondClass_price' => $prices['data']['S'] / 100
+                        'secondClass_price' => $prices['data']['S'] / 100,
+                        'arrival_time' => $res->arrivalTime($i, $travel->departure_station, $id)
                     ]);
                 }
             }

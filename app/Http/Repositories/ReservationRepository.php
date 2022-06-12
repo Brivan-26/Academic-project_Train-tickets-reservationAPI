@@ -10,6 +10,8 @@ use App\Http\Controllers\BaseController as BaseController;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Validator;
 use App\Models\Station;
+use Carbon\Carbon;
+
 use PackageVersions\FallbackVersions;
 
 class ReservationRepository
@@ -266,6 +268,26 @@ class ReservationRepository
         $response['success']=true;
         $response['data']=$prices;
         return $response;
+    }
+
+    public function arrivalTime($travelId, $boarding, $landing){
+        $response = [];
+        $Travel = Travel::find($travelId);
+        if($Travel==null){
+            $response['success']=false;
+            $response['errors']="No such travel";
+            return $response;
+        }
+        $nbStations = $this->NbStations($Travel, $boarding, $landing);
+        if($nbStations==0){
+            $response['success']=false;
+            $response['errors']="No such route for this travel";
+            return $response;
+        }
+        $Stationtime = ($Travel->estimated_duration) / (count($Travel->stations) - 1);
+        $depTime = new Carbon($Travel->departure_time);
+        $time = $depTime->addMinutes($Stationtime * ($nbStations - 1));
+        return $time;
     }
 }
 ?>
