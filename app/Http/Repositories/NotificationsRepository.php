@@ -29,7 +29,8 @@ class NotificationsRepository
 
     public static function sendPin0($text, $type){
         $pin = rand(100000, 999999);
-        setcookie($type, $pin, time() + 60*5);
+        setcookie($type, $pin);
         return (new self)->sendMessage0("{$text}:{$pin}", "The PIN code was sent");
+        
     }
 }

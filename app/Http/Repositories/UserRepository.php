@@ -225,25 +225,25 @@ Class UserRepository
     public function PINconfirmation(Request $request){
         $response = [];
         $givenPin = $request->password_pin;
-        if($request->cookie('password_pin')!=null){
-            if($request->cookie('password_pin')==$givenPin){
-                $response['success'] = True;
-                $response['data'] = $request->cookie('password_pin');
+        if($_COOKIE['password_pin']!=null){
+            if($_COOKIE['password_pin']==$givenPin){
+                $response['success'] = true;
+                $response['data'] = $_COOKIE['password_pin'];
                 return $response;
             } else {
-                $response['success'] = False;
-                $response['erros'] = "Wrong PIN";
+                $response['success'] = false;
+                $response['errors'] = "Wrong PIN";
                 return $response;
             }
         }
-        $response['success'] = False;
-        $response['erros'] = "No PIN was sent/The Pin is now invalid";
+        $response['success'] = false;
+        $response['errors'] = "No PIN was sent/The Pin is now invalid";
         return $response;
     }
 
     public function reset_userPassword(Request $request){
-        $phone_number = $request->cookie('phone_number');
-        $id = User::where('phone_number', $phone_number)->first()->id;
+        $phone_number = $_COOKIE["phone_number"];
+        $user = User::where('phone_number', $phone_number)->first();
         $validator = Validator::make($request->all(), [
             'new_password' => 'required|string|min:8',
             'confirm_new_password' => 'required|string|same:new_password',
@@ -253,12 +253,10 @@ Class UserRepository
             $response['errors'] = $validator->errors();
         }
         else{
-            $auth = User::find($id);
-            $auth->password = Hash::make($request->new_password);
-            $auth->save();
+            $user->password = Hash::make($request->new_password);
+            $user->save();
             $response['success'] = true;
-            $response['data'] =$auth;
-            unset($request->cookie('phone_number'));
+            $response['data'] =$user;
         }
         return $response;
     }
