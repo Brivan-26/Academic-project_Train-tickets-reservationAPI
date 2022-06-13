@@ -129,6 +129,7 @@ Route::controller(ReservationController::class)->group(function(){
 });
 
 Route::get('/authUser', [App\Http\Controllers\UserController::class, 'get_authUser']);
+Route::get('/getAllStations', [App\Http\Controllers\UserController::class, 'get_stations']);
 
 Route::post('/PDF', [PDFController::class, 'downloadTicketAsPDF']);
 

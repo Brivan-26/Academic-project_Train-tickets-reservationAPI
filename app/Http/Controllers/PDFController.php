@@ -18,7 +18,7 @@ class PDFController extends Controller
             foreach($travelTickets as $ticket){
                 if($ticket->user_id!=$id){
                     continue;
-                } else if($ticket->passenger_name==$name){
+                } else if($ticket->passenger_name==$name && $ticket->travel_id == $request->travel_id){
                         $tickets->push($ticket);
                 }
             }

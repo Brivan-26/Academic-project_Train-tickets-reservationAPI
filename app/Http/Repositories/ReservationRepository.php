@@ -179,10 +179,7 @@ class ReservationRepository
         $response = [];
         foreach(Travel::all()->where('status','pending') as $travel){
             if(date("Y-m-d", strtotime($travel->departure_time)) != $request->depTime){
-                //return $this->sendError("No travels found for this date");
-                $response['success'] = false;
-                $response['errors'] = "No travels found for this date";
-                return $response;
+                continue;
             }
             $departure = false;
             $arrival = false;
@@ -200,13 +197,11 @@ class ReservationRepository
             }
         }
         if($Travels){
-            //return $this->sendResponse($Travels, "Travels found for this route");
             $response['success'] = true;
             $response['data'] = $Travels;
         } else {
-            //return $this->sendError("No travels found for this route");
             $response['success'] = false;
-            $response['errors'] = "No travels found for this route";
+            $response['errors'] = "No travels found for specified data";
         }
         return $response;
     }

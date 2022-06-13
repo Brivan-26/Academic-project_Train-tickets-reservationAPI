@@ -28,7 +28,7 @@ class UserController extends BaseController
 
     public function update_infos(Request $request)
     {
-        $response = $this->userRepository->update_userInfos($request);
+        $response = $this->userRepository->update_userInfosNoPic($request);
         if ($response['success']){
             return $this->sendResponse(new UserResource($response['data']),
             "Account info updated successfully");
@@ -87,6 +87,15 @@ class UserController extends BaseController
             "Password reset PIN sent successfully");
         }
         return $this->sendError($response['errors']);
+    }
+
+    public function get_stations() {
+        $response = $this->userRepository->getStations();
+        if($response['success']){
+            return $this->sendResponse($response['data'],
+            "All stations succefully retreived");
+        }
+        return $this->sendError("Couldn't retreive stations");
     }
 
 

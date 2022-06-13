@@ -9,6 +9,7 @@ use Illuminate\Support\Facades\Hash;
 use App\Http\Repositories\NotificationsRepository as Notif;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
+use App\Models\Station;
 Class UserRepository
 {
     public static function all()
@@ -258,6 +259,14 @@ Class UserRepository
             $response['success'] = true;
             $response['data'] =$user;
         }
+        return $response;
+    }
+
+    public function getStations(){
+        $response = [];
+        $stations = Station::all()->pluck('name');
+        $response['success'] = true;
+        $response['data'] = $stations;
         return $response;
     }
 }

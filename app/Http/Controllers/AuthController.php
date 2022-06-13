@@ -37,6 +37,7 @@ class AuthController extends BaseController
             'user' => new UserResource($user),
             'token' => $token
         ];
+        Auth::login($user);
         return $this->sendResponse($result,'Registration succesfull');
 
     }

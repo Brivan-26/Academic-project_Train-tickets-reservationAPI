@@ -78,10 +78,6 @@ class PaymentRepository extends Tool
 
             $response['success'] = true;
             $response['data'] = $charge;
-            /*return response()->json([
-                "status" => "payment made, ticket created",
-                "message" => "ok"
-            ], 200);*/
         } else {
             $response['success'] = false;
             $response['errors'] = $prices['errors'];

@@ -25,7 +25,7 @@ return new class extends Migration
             $table->unsignedBigInteger('boarding_station');
             $table->unsignedBigInteger('landing_station');
             $table->float('price');
-            $table->string('qrcode_token');
+            $table->string('qrcode_token')->unique();
             $table->timestamps();
 
             $table->foreign('travel_id')->references('id')->on('travels')->onDelete('cascade');
