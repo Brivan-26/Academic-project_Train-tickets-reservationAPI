@@ -41,7 +41,7 @@ Route::prefix('admin')->middleware(['auth:sanctum', 'can:is_admin'])->controller
         Route::get('/user/restore/{id}', 'restore_user');
         Route::get('/user/destroy/{id}', 'destory_user');
         Route::get('/user/upgradeRole/{id}', 'upgradeRole_user');
-
+        Route::get('/user/lastJoined', 'get_lastJoined');
         // Travel CRUD operations
 
         Route::get('/travel', 'travels');
@@ -49,7 +49,7 @@ Route::prefix('admin')->middleware(['auth:sanctum', 'can:is_admin'])->controller
         Route::put('/travel/{id}', 'travel_update');
         Route::get('/travel/delete/{id}', 'travel_delete');
         Route::post('/travel/cancel/{id}', 'cancel_travel');
-
+        // Route::get("/travels/lastFive", "get_fiveTravels");
         // Station CRUD operations
 
         Route::get('/station', 'stations');
@@ -67,6 +67,7 @@ Route::prefix('admin')->middleware(['auth:sanctum', 'can:is_admin'])->controller
 
         // Reviews
         Route::get('reviews/{id}', 'reviews_get');
+        Route::get('/stats', 'get_stats');
 
 });
 

@@ -262,6 +262,28 @@ Class UserRepository
         return $response;
     }
 
+    public function getLastJoined()
+    {
+        $response = [];
+        $users = User::all();
+        $response['success'] = true;
+        $response['data'] = $users;
+        return $response;
+    }
+
+    public function getBaseStats()
+    {
+        $response = [];
+        $stats = [
+            "users" => count(User::all()),
+            "travels" => count(\App\Models\Travel::all()),
+            "tickets" => count(\App\Models\Ticket::all()),
+        ];
+        $response['success'] = true;
+        $response['data'] = $stats;
+        return $response;
+    }
+
     public function getStations(){
         $response = [];
         $stations = Station::all()->pluck('name');

@@ -70,6 +70,26 @@ class AdminDashboardController extends BaseController
         }
     }
 
+    public function get_lastJoined()
+    {
+        $response = $this->userRepository->getLastJoined();
+        if($response["success"]) {
+            return $this->sendResponse(UserResource::collection($response["data"]), 'Users succefully retreived');
+        }else {
+            return $this->sendError("Something went wrong!");
+        }
+    }
+    
+    public function get_stats()
+    {
+        $response = $this->userRepository->getBaseStats();
+        if($response["success"]) {
+            return $this->sendResponse($response["data"], 'Stats succefully retreived');
+        }else {
+            return $this->sendError("Something went wrong!");
+        }
+    }
+
     public function upgradeRole_user(Request $request, $id)
     {
         $response = $this->userRepository->upgradeRole($request, $id);
@@ -112,6 +132,16 @@ class AdminDashboardController extends BaseController
         $response = $this->travelRepository->deleteById($id);
         if($response["success"]) {
             return $this->sendResponse(new TravelResource($response["data"]), 'Travel succefully deleted!');
+        }else {
+            return $this->sendError('Something went wrong!', $response["errors"]);
+        }
+    }
+
+    public function get_fiveTravels()
+    {
+        $response = $this->travelRepository->getFiveTravels($id);
+        if($response["success"]) {
+            return $this->sendResponse(TravelResource::colection($response["data"]), 'Travels succefully deleted!');
         }else {
             return $this->sendError('Something went wrong!', $response["errors"]);
         }

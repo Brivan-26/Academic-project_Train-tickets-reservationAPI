@@ -153,6 +153,11 @@ Class TravelRepository
 
     }
 
+    // public function getFiveTravels()
+    // {
+    //     $response = [];
+    //     $travels = Travel::where("status", "completed")->where()->->get(5);
+    // }
 
     public function travelOfTheDay(){
         $response = [];
