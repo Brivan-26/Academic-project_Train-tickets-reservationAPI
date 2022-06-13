@@ -26,6 +26,7 @@ return new class extends Migration
             $table->timestamps();
 
             $table->foreign('arrival_station')->references('id')->on('stations')->onDelete('cascade');
+            $table->foreign('validator_id')->references('id')->on('users');
             $table->foreign('departure_station')->references('id')->on('stations')->onDelete('cascade');
 
         });
