@@ -66,4 +66,14 @@ class ValidatorDashboardController extends BaseController
         }
         return $this->sendError("Something went wrong",$response['errors']);
     }
+
+    public function update_img(Request $request)
+    {
+        $response = $this->userRepository->update_userImg($request);
+        if ($response['success']){
+            return $this->sendResponse(new UserResource($response['data']),
+            "Profile Image updated successfully");
+        }
+        return $this->sendError("Something went wrong",$response['errors']);
+    }
 }

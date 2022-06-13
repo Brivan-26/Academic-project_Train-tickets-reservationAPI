@@ -116,6 +116,7 @@ Route::prefix('validator')->middleware(["auth:sanctum", "can:is_validator"])
         Route::get('/todayTravels', 'get_todayTravels');
         Route::post('/tickets/validate', 'validateTicket');
         Route::post('/update_infos','update_infosNoPic');
+        Route::post('/update_img','update_img');
 
 });
 
