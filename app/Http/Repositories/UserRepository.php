@@ -83,10 +83,36 @@ Class UserRepository
         return $response;
     }
 
+    public function update_userImg($request){
+        $response = [];
+        $id = auth()->user()->id ;
+        $validator = Validator::make($request->all(), [
+            'image' => 'required|image:jpeg,png,jpg,gif,svg'
+        ]);
+        if($validator->fails()){
+            $response['success'] = false ;
+            $response['errors'] = $validator->errors();
+        }
+        else{
+            $auth = User::find($id);
+            
+            if($auth->profile_img){
+                Storage::disk('public')->delete($auth->profile_img);
+            };
+            $path = Storage::disk('public')->put('users/avatars', $request->file('image'));
+            $auth->profile_img = $path;
+
+            $auth->save();
+            $response['success'] = true ;
+            $response['data'] = $auth;
+        }
+        return $response;
+    }
+
     public function update_userPassword($request){
         $id = auth()->user()->id;
         $validator = Validator::make($request->all(), [
-            'current_password' => 'required|string|current_password',
+            'current_password' => 'required|string',
             'password' => 'required|string|min:8',
             'confirm_password' => 'required|string|same:password',
         ]);
@@ -96,10 +122,16 @@ Class UserRepository
         }
         else{
             $auth = User::find($id);
-            $auth->password = Hash::make($request->password);
-            $auth->save();
-            $response['success'] = true;
-            $response['data'] =$auth;
+            if (!Hash::check($request->current_password, $auth->password)){
+                $response['success'] = false;
+                $response['errors'] = ['current_password' => 'Wrong password']; 
+            }
+            else{
+                $auth->password = Hash::make($request->password);
+                $auth->save();
+                $response['success'] = true;
+                $response['data'] =$auth; 
+            }
         }
         return $response;
     }
