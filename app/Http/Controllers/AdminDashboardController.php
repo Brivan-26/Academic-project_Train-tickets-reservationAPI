@@ -29,7 +29,7 @@ class AdminDashboardController extends BaseController
         $this->userRepository = $userRepository;
         $this->travelRepository = $travelRepository;
         $this->stationRepository = $stationRepository;
-        $this->ticketRepository = $ticketRepository;
+        $this->ticketRepository = $ticketRepository;use Laravel\Sanctum\HasApiTokens;
         $this->reviewRepository = $reviewRepository;
 
     }
@@ -79,7 +79,7 @@ class AdminDashboardController extends BaseController
             return $this->sendError("Something went wrong!");
         }
     }
-    
+
     public function get_stats()
     {
         $response = $this->userRepository->getBaseStats();

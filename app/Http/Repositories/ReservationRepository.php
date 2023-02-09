@@ -78,6 +78,11 @@ class ReservationRepository
             $response['errors'] = $validator->errors();
             return $response;
         }
+        if($request->landing_station == $request->boarding_station){
+            $response['success'] = false;
+            $response['errors'] = "Please select different stations";
+            return $response;
+        }
         $travel = Travel::find($request->travelId);
         if($travel==null){
             $response['success'] = false;

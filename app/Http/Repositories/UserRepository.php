@@ -297,7 +297,7 @@ Class UserRepository
     public function getLastJoined()
     {
         $response = [];
-        $users = User::all();
+        $users = User::all()->take(5);
         $response['success'] = true;
         $response['data'] = $users;
         return $response;
